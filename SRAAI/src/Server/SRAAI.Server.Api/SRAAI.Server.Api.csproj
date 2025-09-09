@@ -27,6 +27,7 @@
         <PackageReference Include="HtmlSanitizer" />
         <PackageReference Include="libphonenumber-csharp" />
         <PackageReference Include="Humanizer" />
+        <PackageReference Include="ClosedXML" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" />
         <PackageReference Include="NWebsec.AspNetCore.Middleware" />

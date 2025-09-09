@@ -1,0 +1,78 @@
+@attribute [Route(PageUrls.ExcelImport)]
+@attribute [Route("{culture?}" + PageUrls.ExcelImport)]
+@attribute [Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)]
+@inherits AppPageBase
+
+@using Bit.BlazorUI
+@using System.Linq
+
+<AppPageData Title="Excel Import"
+             PageTitle="Excel Import" />
+
+<section>
+	<BitStack Gap="16">
+		<BitStack Gap="8">
+			<BitTextField @bind-Value="dataset"
+						Label="Dataset"
+						Placeholder="Departments, Employees, ..."
+						Disabled="isBusy" />
+
+			<BitFileUpload @ref="fileUploadRef"
+					   AutoReset
+					   AutoUpload
+					   HideFileView
+					   Accept=".xlsx"
+					   MaxSize="1024 * 1024 * 50"
+					   UploadUrlProvider="GetUploadUrl"
+					   UploadRequestHttpHeadersProvider="GetUploadRequestHeaders"
+					   OnUploading="() => isBusy = true"
+					   OnUploadFailed="HandleUploadFailed"
+					   OnUploadComplete="HandleUploadComplete">
+				<LabelTemplate>
+					<BitButton IconName="@BitIconName.Upload" Disabled="string.IsNullOrWhiteSpace(dataset) || isBusy">
+						Select Excel file
+					</BitButton>
+				</LabelTemplate>
+			</BitFileUpload>
+		</BitStack>
+
+		@if (lastResult is not null)
+		{
+			<div>
+				New version: <b>@lastResult.NewVersionNo</b> · Inserted: <b>@lastResult.Inserted</b> · Updated: <b>@lastResult.Updated</b> · Deleted: <b>@lastResult.Deleted</b>
+			</div>
+		}
+
+		<BitStack Gap="4">
+			<BitText typography="BitTypography.Subtitle1">History</BitText>
+			@if (isLoadingHistory)
+			{
+				<BitSlickBarsLoading />
+			}
+			else if (history is not null)
+			{
+				<BitDataGrid TGridItem="ImportSessionVm" Items="history.AsQueryable()" Class="excel-history">
+					<BitDataGridPropertyColumn Title="Version" Property="h => h.NewVersionNo" />
+					<BitDataGridPropertyColumn Title="Inserted" Property="h => h.InsertedCount" />
+					<BitDataGridPropertyColumn Title="Updated" Property="h => h.UpdatedCount" />
+					<BitDataGridPropertyColumn Title="Deleted" Property="h => h.DeletedCount" />
+					<BitDataGridTemplateColumn Title="Actions" Context="item">
+						<BitButton Size="BitSize.Small" OnClick="() => LoadChanges(item.NewVersionNo)">View changes</BitButton>
+					</BitDataGridTemplateColumn>
+				</BitDataGrid>
+			}
+		</BitStack>
+
+		@if (changes is not null)
+		{
+			<BitText typography="BitTypography.Subtitle1">Changes for version @selectedVersion</BitText>
+			<BitDataGrid TGridItem="ChangeVm" Items="changes.AsQueryable()" Class="excel-changes">
+				<BitDataGridPropertyColumn Title="BusinessKey" Property="c => c.BusinessKey" />
+				<BitDataGridPropertyColumn Title="ChangeType" Property="c => c.ChangeType" />
+				<BitDataGridPropertyColumn Title="DataJson" Property="c => c.DataJson" />
+			</BitDataGrid>
+		}
+	</BitStack>
+</section>
+
+

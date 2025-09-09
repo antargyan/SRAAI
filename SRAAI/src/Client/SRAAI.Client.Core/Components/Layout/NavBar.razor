@@ -12,6 +12,7 @@
         <AuthorizeView Policy="@AppFeatures.AdminPanel.ManageProductCatalog">
             <BitNavBarOption Text="@Localizer[nameof(AppStrings.Categories)]" IconName="@BitIconName.BuildQueue" Url="@PageUrls.Categories" />
             <BitNavBarOption Text="@Localizer[nameof(AppStrings.Products)]" IconName="@BitIconName.Product" Url="@PageUrls.Products" />
+            <BitNavBarOption Text="Excel Import" IconName="@BitIconName.ExcelDocument" Url="@PageUrls.ExcelImport" />
         </AuthorizeView>
 
         <BitNavBarOption Text="@Localizer[nameof(AppStrings.Terms)]" IconName="@BitIconName.EntityExtraction" Url="@PageUrls.Terms" />

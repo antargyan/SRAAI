@@ -7,6 +7,7 @@ using SRAAI.Server.Api.Models.PushNotification;
 using Hangfire.EntityFrameworkCore;
 using SRAAI.Server.Api.Models.Attachments;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using SRAAI.Server.Api.Models.Excel;
 
 namespace SRAAI.Server.Api.Data;
 
@@ -25,6 +26,9 @@ public partial class AppDbContext(DbContextOptions<AppDbContext> options)
     public DbSet<Attachment> Attachments { get; set; } = default!;
 
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = default!;
+
+    public DbSet<ExcelRecord> ExcelRecords { get; set; } = default!;
+    public DbSet<ExcelImportSession> ExcelImportSessions { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -22,6 +22,9 @@ public static partial class PageUrls
     public const string AddOrEditProduct = "/add-edit-product";
 
 
+    public const string ExcelImport = "/excel-import";
+
+
 
     public const string Authorize = "/authorize";
 

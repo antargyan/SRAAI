@@ -107,5 +107,6 @@
         <PackageVersion Include="Microsoft.Playwright.MSTest" Version="1.54.0" />
         <PackageVersion Include="MSTest.TestAdapter" Version="3.10.2" />
         <PackageVersion Include="MSTest.TestFramework" Version="3.10.2" />
+        <PackageVersion Include="ClosedXML" Version="0.105.0"/>
     </ItemGroup>
 </Project>

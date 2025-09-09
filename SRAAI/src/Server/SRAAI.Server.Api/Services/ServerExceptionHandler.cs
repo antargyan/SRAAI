@@ -14,6 +14,11 @@ public partial class ServerExceptionHandler : SharedExceptionHandler, IProblemDe
 
     private static readonly Guid appSessionId = Guid.NewGuid();
 
+    public ServerExceptionHandler(IStringLocalizer<AppStrings> autoInjectedLocalizer)
+        : base(autoInjectedLocalizer)
+    {
+    }
+
     public bool CanWrite(ProblemDetailsContext context) => true;
 
     public async ValueTask WriteAsync(ProblemDetailsContext context)
