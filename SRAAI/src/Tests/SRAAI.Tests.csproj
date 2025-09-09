@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <IsTestProject>true</IsTestProject>
+        <RunSettingsFilePath>$(MSBuildProjectDirectory)\.runsettings</RunSettingsFilePath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="coverlet.collector">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="FakeItEasy" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Microsoft.Playwright.MSTest" />
+        <PackageReference Include="MSTest.TestAdapter" />
+        <PackageReference Include="MSTest.TestFramework" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Server\SRAAI.Server.Web\SRAAI.Server.Web.csproj" />
+        <ProjectReference Include="..\Server\SRAAI.Server.Api\SRAAI.Server.Api.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="System.Net.Http.Headers" />
+        <Using Include="System.Net.Http.Json" />
+        <Using Include="SRAAI.Shared" />
+        <Using Include="SRAAI.Server.Web" />
+        <Using Include="SRAAI.Shared.Enums" />
+        <Using Include="Microsoft.AspNetCore.Http" />
+        <Using Include="Microsoft.AspNetCore.Components" />
+        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+        <Using Include="Microsoft.Playwright" />
+        <Using Include="Microsoft.Playwright.MSTest" />
+        <Using Include="FakeItEasy" />
+                <PackageReference Include="GitHubActionsTestLogger" PrivateAssets="all" />
+            </ItemGroup>
+
+</Project>

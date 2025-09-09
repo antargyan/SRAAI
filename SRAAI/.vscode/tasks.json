@@ -1,0 +1,46 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "before-build",
+            "type": "shell",
+            "command": "dotnet build src/Client/SRAAI.Client.Core/SRAAI.Client.Core.csproj -t:BeforeBuildTasks",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "dotnet build src/Server/SRAAI.Server.Web/SRAAI.Server.Web.csproj"
+        },
+        {
+            "label": "generate-resx-files",
+            "type": "shell",
+            "command": "dotnet build src/Shared/SRAAI.Shared.csproj -t:PrepareResources"
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "run"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src/Server/SRAAI.Server.Web"
+            },
+            "isBackground": true
+        },
+        {
+            "label": "run-tests",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "test"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src/Tests"
+            }
+        }
+    ]
+}

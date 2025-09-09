@@ -1,0 +1,73 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="DebugBlazorServer" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Folder Name="/.SolutionItems/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path=".vsconfig" />
+    <File Path="Clean.bat" />
+    <File Path="global.json" />
+	<File Path="vs-spell.dic" />
+	<File Path=".vscode/mcp.json" />
+    <File Path="README.md" />
+	<File Path="settings.VisualStudio.json" />
+    <File Path="Bit.ResxTranslator.json" />
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Packages.props" />
+  </Folder>
+<!--#if (pipeline == "Azure")-->
+  <Folder Name="/.SolutionItems/.azure-devops/" />
+  <Folder Name="/.SolutionItems/.azure-devops/workflows/">
+    <File Path=".azure-devops/workflows/cd.yml" />
+    <File Path=".azure-devops/workflows/ci.yml" />
+  </Folder>
+<!--#endif-->
+  <Folder Name="/.SolutionItems/.github/">
+	<File Path=".github/copilot-instructions.md" />
+  </Folder>
+  <Folder Name="/.SolutionItems/.github/prompts/">
+    <File Path=".github/prompts/resx.prompt.md" />
+    <File Path=".github/prompts/scaffold.prompt.md" />
+  </Folder>
+<!--#if (pipeline == "GitHub")-->
+  <Folder Name="/.SolutionItems/.github/workflows/">
+    <File Path=".github/workflows/cd-production.yml" />
+    <File Path=".github/workflows/cd-test.yml" />
+    <File Path=".github/workflows/cd-template.yml" />
+    <File Path=".github/workflows/ci.yml" />
+  </Folder>
+<!--#endif-->
+  <Folder Name="/Server/">
+	<Project Path="src/Server/SRAAI.Server.Web/SRAAI.Server.Web.csproj" />
+    <Project Path="src/Server/SRAAI.Server.Api/SRAAI.Server.Api.csproj" />
+	<Project Path="src/Server/SRAAI.Server.Shared/SRAAI.Server.Shared.csproj" />
+<!--#if (aspire == true)-->
+	<Project Path="src/Server/SRAAI.Server.AppHost/SRAAI.Server.AppHost.csproj" />
+<!--#endif-->
+  </Folder>
+  <Folder Name="/Client/">
+    <Project Path="src/Client/SRAAI.Client.Core/SRAAI.Client.Core.csproj" />
+    <Project Path="src/Client/SRAAI.Client.Maui/SRAAI.Client.Maui.csproj">
+      <Build Solution="DebugBlazorServer|*" Project="false" />
+      <Deploy Solution="Debug|*" />
+      <Deploy Solution="Release|*" />
+    </Project>
+    <Project Path="src/Client/SRAAI.Client.Web/SRAAI.Client.Web.csproj">
+      <Build Solution="DebugBlazorServer|*" Project="false" />
+    </Project>
+    <Project Path="src/Client/SRAAI.Client.Windows/SRAAI.Client.Windows.csproj">
+		<Build Solution="DebugBlazorServer|*" Project="false" />
+	</Project>
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="src/Shared/SRAAI.Shared.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="src/Tests/SRAAI.Tests.csproj">
+      <Build Solution="DebugBlazorServer|*" Project="false" />
+    </Project>
+  </Folder>
+</Solution>

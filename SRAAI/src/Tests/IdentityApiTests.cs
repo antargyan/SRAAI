@@ -1,0 +1,59 @@
+﻿using SRAAI.Client.Core.Services;
+using SRAAI.Client.Core.Services.Contracts;
+using SRAAI.Shared.Controllers.Identity;
+using SRAAI.Tests.Services;
+
+namespace SRAAI.Tests;
+
+[TestClass]
+public partial class IdentityApiTests
+{
+    [TestMethod]
+    public async Task SignInTest()
+    {
+        await using var server = new AppTestServer();
+
+        await server.Build(services =>
+        {
+            // Services registered in this test project will be used instead of the application's services, allowing you to fake certain behaviors during testing.
+            services.Replace(ServiceDescriptor.Scoped<IStorageService, TestStorageService>());
+            services.Replace(ServiceDescriptor.Transient<IAuthTokenProvider, TestAuthTokenProvider>());
+        }).Start();
+
+        await using var scope = server.WebApp.Services.CreateAsyncScope();
+
+        var authenticationManager = scope.ServiceProvider.GetRequiredService<AuthManager>();
+
+        await authenticationManager.SignIn(new()
+        {
+            Email = TestData.DefaultTestEmail,
+            Password = TestData.DefaultTestPassword
+        }, TestContext.CancellationTokenSource.Token);
+
+        var userController = scope.ServiceProvider.GetRequiredService<IUserController>();
+
+        var user = await userController.GetCurrentUser(TestContext.CancellationTokenSource.Token);
+
+        Assert.AreEqual(Guid.Parse("8ff71671-a1d6-4f97-abb9-d87d7b47d6e7"), user.Id);
+    }
+
+    [TestMethod]
+    public async Task UnauthorizedAccessTest()
+    {
+        await using var server = new AppTestServer();
+
+        await server.Build(services =>
+        {
+            services.Replace(ServiceDescriptor.Scoped<IStorageService, TestStorageService>());
+            services.Replace(ServiceDescriptor.Transient<IAuthTokenProvider, TestAuthTokenProvider>());
+        }).Start();
+
+        await using var scope = server.WebApp.Services.CreateAsyncScope();
+
+        var userController = scope.ServiceProvider.GetRequiredService<IUserController>();
+
+        await Assert.ThrowsExactlyAsync<UnauthorizedException>(() => userController.GetCurrentUser(TestContext.CancellationTokenSource.Token));
+    }
+
+    public TestContext TestContext { get; set; } = default!;
+}

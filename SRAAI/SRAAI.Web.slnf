@@ -1,0 +1,14 @@
+{
+  "solution": {
+    "path": "SRAAI.slnx",
+    "projects": [
+      "src\\Client\\SRAAI.Client.Core\\SRAAI.Client.Core.csproj",
+      "src\\Client\\SRAAI.Client.Web\\SRAAI.Client.Web.csproj",
+      "src\\Server\\SRAAI.Server.Api\\SRAAI.Server.Api.csproj",
+      "src\\Server\\SRAAI.Server.Shared\\SRAAI.Server.Shared.csproj",
+      "src\\Server\\SRAAI.Server.Web\\SRAAI.Server.Web.csproj",
+      "src\\Shared\\SRAAI.Shared.csproj",
+      "src\\Tests\\SRAAI.Tests.csproj"
+    ]
+  }
+}
