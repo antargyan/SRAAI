@@ -29,9 +29,18 @@
 					   OnUploadFailed="HandleUploadFailed"
 					   OnUploadComplete="HandleUploadComplete">
 				<LabelTemplate>
-					<BitButton IconName="@BitIconName.Upload" Disabled="isBusy">Select Excel file</BitButton>
+					<BitButton IconName="@BitIconName.Upload" 
+							   Disabled="isBusy || string.IsNullOrWhiteSpace(dataset)"
+							   OnClick="() => fileUploadRef.Browse()">Select Excel file</BitButton>
 				</LabelTemplate>
 			</BitFileUpload>
+			
+			@if (string.IsNullOrWhiteSpace(dataset))
+			{
+				<BitText Color="BitColor.Warning">
+					Please enter a dataset name before selecting a file.
+				</BitText>
+			}
 		</BitStack>
 
 		@if (lastResult is not null)
