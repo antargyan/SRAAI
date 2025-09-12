@@ -29,9 +29,7 @@
 					   OnUploadFailed="HandleUploadFailed"
 					   OnUploadComplete="HandleUploadComplete">
 				<LabelTemplate>
-					<BitButton IconName="@BitIconName.Upload" Disabled="string.IsNullOrWhiteSpace(dataset) || isBusy">
-						Select Excel file
-					</BitButton>
+					<BitButton IconName="@BitIconName.Upload" Disabled="isBusy">Select Excel file</BitButton>
 				</LabelTemplate>
 			</BitFileUpload>
 		</BitStack>
