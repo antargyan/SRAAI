@@ -57,6 +57,7 @@ public static partial class Program
         services.AddScoped<PhoneServiceJobsRunner>();
         services.AddScoped<ProductEmbeddingService>();
         services.AddScoped<SRAAI.Server.Api.Services.Excel.IExcelImportService, SRAAI.Server.Api.Services.Excel.ExcelImportService>();
+        services.AddScoped<SRAAI.Server.Api.Services.AbhayYojana.IAbhayYojanaExcelImportService, SRAAI.Server.Api.Services.AbhayYojana.AbhayYojanaExcelImportService>();
         if (appSettings.Sms?.Configured is true)
         {
             TwilioClient.Init(appSettings.Sms.TwilioAccountSid, appSettings.Sms.TwilioAutoToken);

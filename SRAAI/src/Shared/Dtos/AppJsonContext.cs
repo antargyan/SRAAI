@@ -5,6 +5,7 @@ using SRAAI.Shared.Dtos.PushNotification;
 using SRAAI.Shared.Dtos.Identity;
 using SRAAI.Shared.Dtos.Statistics;
 using SRAAI.Shared.Dtos.Diagnostic;
+using SRAAI.Shared.Dtos.AbhayYojana;
 
 namespace SRAAI.Shared.Dtos;
 
@@ -33,7 +34,9 @@ namespace SRAAI.Shared.Dtos;
 [JsonSerializable(typeof(List<ProductPercentagePerCategoryResponseDto>))]
 [JsonSerializable(typeof(VerifyWebAuthnAndSignInRequestDto))]
 [JsonSerializable(typeof(WebAuthnAssertionOptionsRequestDto))]
-
+[JsonSerializable(typeof(AbhayYojanaApplicationDto))]
+[JsonSerializable(typeof(CreateAbhayYojanaApplicationDto))]
+[JsonSerializable(typeof(UpdateAbhayYojanaApplicationDto))]
 public partial class AppJsonContext : JsonSerializerContext
 {
 }

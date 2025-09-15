@@ -29,6 +29,8 @@ public partial class AppDbContext(DbContextOptions<AppDbContext> options)
 
     public DbSet<ExcelRecord> ExcelRecords { get; set; } = default!;
     public DbSet<ExcelImportSession> ExcelImportSessions { get; set; } = default!;
+    
+    public DbSet<AbhayYojanaApplication> AbhayYojanaApplications { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

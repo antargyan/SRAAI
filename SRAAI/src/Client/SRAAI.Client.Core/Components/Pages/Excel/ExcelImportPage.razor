@@ -41,6 +41,16 @@
 					Please enter a dataset name before selecting a file.
 				</BitText>
 			}
+			
+			<BitText Color="BitColor.Info">
+				<strong>Excel File Requirements:</strong><br/>
+				• File must be in .xlsx format<br/>
+				• Column A: Name (required, non-empty)<br/>
+				• Column B: Email (required, unique, used as primary key)<br/>
+				• Column C: Phone (optional)<br/>
+				• Column D: Course (optional)<br/>
+				• Duplicate emails will be automatically filtered out
+			</BitText>
 		</BitStack>
 
 		@if (lastResult is not null)
@@ -74,7 +84,7 @@
 		{
 			<BitText typography="BitTypography.Subtitle1">Changes for version @selectedVersion</BitText>
 			<BitDataGrid TGridItem="ChangeVm" Items="changes.AsQueryable()" Class="excel-changes">
-				<BitDataGridPropertyColumn Title="BusinessKey" Property="c => c.BusinessKey" />
+				<BitDataGridPropertyColumn Title="Email (Primary Key)" Property="c => c.BusinessKey" />
 				<BitDataGridPropertyColumn Title="ChangeType" Property="c => c.ChangeType" />
 				<BitDataGridPropertyColumn Title="DataJson" Property="c => c.DataJson" />
 			</BitDataGrid>
