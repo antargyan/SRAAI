@@ -177,9 +177,7 @@ public partial class AbhayYojanaController : AppControllerBase
 
             List<AbhayYojanaApplicationDto> result = new();
 
-            // ----------------------------
-            // 1) Process Excel rows
-            // ----------------------------
+         
             for (int i = 0; i < customersTable.Rows.Count; i += 3)
             {
                 DataRow row = customersTable.Rows[i];
@@ -231,15 +229,13 @@ public partial class AbhayYojanaController : AppControllerBase
                 }
                 else
                 {
-                    dto.Status = "Additional"; // present in Excel but not DB
+                    dto.Status = "Additional"; 
                 }
 
                 result.Add(dto);
             }
 
-            // ----------------------------
-            // 2) Find NotFound (DB-only)
-            // ----------------------------
+            
             var excelSlumNumbers = customersTable.Rows
      .Cast<DataRow>()
      .Select(r => r[1]?.ToString())
