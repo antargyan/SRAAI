@@ -26,6 +26,7 @@ public static partial class PageUrls
 
     public const string AbhayYojana = "/abhay-yojana";
     public const string SummaryPage = "/summary";
+    public const string BuilderPage = "/builderdata";
 
     public const string Authorize = "/authorize";
 

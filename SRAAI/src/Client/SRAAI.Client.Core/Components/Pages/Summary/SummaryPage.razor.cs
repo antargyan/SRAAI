@@ -58,10 +58,15 @@ public partial class SummaryPage : AppPageBase
             StateHasChanged();
         }
     }
-    private async Task<string> GoToSummary()
+    private async void Cancel()
     {
-        return new Uri(AbsoluteServerAddress, "/api/AbhayYojana/Summary").ToString();
+        try
+        {
+            NavigationManager.NavigateTo($"{PageUrls.AbhayYojana}");
+        }
+        catch
+        {
+        }
     }
-  
 }
 

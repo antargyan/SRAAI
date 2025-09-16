@@ -17,7 +17,7 @@ public partial class AbhayYojanaPage : AppPageBase
     private AbhayYojanaStatistics? statistics;
     
     [AutoInject] private HttpClient HttpClient = default!;
-
+    [AutoInject] private DataService DataService = default!;
     protected override async Task OnInitAsync()
     {
         await base.OnInitAsync();
@@ -91,6 +91,19 @@ public partial class AbhayYojanaPage : AppPageBase
         return new() { { "Authorization", $"Bearer {token}" } };
     }
 
+
+    private async Task<string> GetBuilderUploadUrl()
+    {
+        return new Uri(AbsoluteServerAddress, "/api/AbhayYojana/BuilderExcelScanning").ToString();
+    }
+
+    private async Task<Dictionary<string, string>> GetBuilderUploadRequestHeaders()
+    {
+        var token = await AuthManager.GetFreshAccessToken(requestedBy: nameof(BitFileUpload));
+        return new() { { "Authorization", $"Bearer {token}" } };
+    }
+
+
     private Task HandleUploadFailed(BitFileInfo info)
     {
         isBusy = false;
@@ -103,6 +116,7 @@ public partial class AbhayYojanaPage : AppPageBase
         isBusy = false;
         try
         {
+            DataService.applications = JsonSerializer.Deserialize<List<AbhayYojanaApplicationDto>>(info.Message!, JsonSerializerOptions);
             // Refresh data after successful import
             await LoadApplications();
             await LoadStatistics();
@@ -111,6 +125,22 @@ public partial class AbhayYojanaPage : AppPageBase
             // The import result will be displayed when the data is refreshed
             SnackBarService.Success("Excel imported successfully. Please check the results below.");
             
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            SnackBarService.Error($"Failed to process import result: {ex.Message}");
+        }
+    }
+
+    private async Task HandleBuilderUploadComplete(BitFileInfo info)
+    {
+        isBusy = false;
+        try
+        {
+            DataService.applications = JsonSerializer.Deserialize<List<AbhayYojanaApplicationDto>>(info.Message!, JsonSerializerOptions);
+            NavigationManager.NavigateTo($"{PageUrls.BuilderPage}");
+
             StateHasChanged();
         }
         catch (Exception ex)

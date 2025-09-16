@@ -1,0 +1,71 @@
+@attribute [Route(PageUrls.BuilderPage)]
+@attribute [Route("{culture?}" + PageUrls.BuilderPage)]
+@attribute [Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)]
+@inherits AppPageBase
+
+@using SRAAI.Shared.Dtos.AbhayYojana
+@using SRAAI.Client.Core.Components.Pages.BuilderData
+
+<AppPageData Title="Summary List"
+             PageTitle="Summary List" />
+
+<section>
+    @if (isLoadingStatistics)
+    {
+        <p>Loading data...</p>
+    }
+    else if (statistics is null || !statistics.Any())
+    {
+        <p>No records found.</p>
+    }
+    else
+    {
+        <table class="table table-striped" border="1"
+               style="border: 2px solid #333; width: 100%; height: 400px; text-align: center; vertical-align: middle;">
+            <thead>
+                <tr>
+                    <th rowspan="2">अ. क्र.</th>
+                    <th colspan="2">मुळ परिसरातील झोप. क्र.</th>
+                    <th rowspan="2">मुळ परिसरातील झोपडीधारकाचे नाव</th>
+                    <th rowspan="2">विहीत जोडपत्र दाखल केलेल्या अर्जदाराचे नाव</th>
+                    <th colspan="3">मतदार यादीनमधील तपशील</th>
+                    <th rowspan="2">झोपडीचा वापर</th>
+                    <th rowspan="2">झोपडीखालील चटई क्षेत्र (चौ. फु.)</th>
+                    <th rowspan="2">अर्जदार यांनी अभय योजनेनुसार सादर केलेल्या प्रमुख पुराव्यांचा तपशील</th>
+                    <th rowspan="2">पात्र/ अपात्र/ अनिर्णित</th>
+                    <th rowspan="2">शेरा</th>
+                </tr>
+                <tr>
+                    <th>भाग क्र.</th>
+                    <th>म. झो. क्र.</th>
+                    <th>वर्ष</th>
+                    <th>भाग क्र.</th>
+                    <th>मतदार यादितील अ. क्र.</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in statistics)
+                {
+                    <tr>
+                        <td>@item.SerialNumber</td> 
+                        <td>@item.OriginalSlumNumber</td> 
+                        <td></td> 
+                        <td>@item.OriginalSlumDwellerName</td> 
+                        <td>@item.ApplicantName</td> 
+                        <td>@item.VoterListYear</td> 
+                        <td>@item.VoterListPartNumber</td> 
+                        <td>@item.VoterListSerialNumber</td> 
+                        <td>@item.SlumUsage</td>
+                        <td>@item.CarpetAreaSqFt</td> 
+                        <td>@item.EvidenceDetails</td> 
+                        <td>@item.EligibilityStatus</td> 
+                        <td>@item.Remarks</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    <BitButton IconName="@BitIconName.View"
+               Style="margin-top:15px;"
+               OnClick="Cancel">Cancel</BitButton>
+</section>

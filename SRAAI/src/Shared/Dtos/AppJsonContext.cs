@@ -42,6 +42,10 @@ namespace SRAAI.Shared.Dtos;
 [JsonSerializable(typeof(SummaryDto))]
 [JsonSerializable(typeof(List<SummaryDto>))]
 [JsonSerializable(typeof(PagedResult<SummaryDto>))]
+
+[JsonSerializable(typeof(AbhayYojanaApplicationDto))]
+[JsonSerializable(typeof(List<AbhayYojanaApplicationDto>))]
+[JsonSerializable(typeof(PagedResult<AbhayYojanaApplicationDto>))]
 public partial class AppJsonContext : JsonSerializerContext
 {
 }

@@ -45,6 +45,7 @@ public static partial class IClientCoreServiceCollectionExtensions
         services.AddSessioned<SnackBarService>();
         services.AddSessioned<ILocalHttpServer, NoOpLocalHttpServer>();
         services.AddSessioned<ITelemetryContext, AppTelemetryContext>();
+        services.AddSingleton<DataService>();
         services.AddSessioned<AuthenticationStateProvider>(sp =>
         {
             var authenticationStateProvider = ActivatorUtilities.CreateInstance<AuthManager>(sp);

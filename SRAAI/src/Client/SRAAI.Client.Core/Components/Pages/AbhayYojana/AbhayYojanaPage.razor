@@ -33,6 +33,25 @@
                                OnClick="() => fileUploadRef.Browse()">Select Excel file</BitButton>
                 </LabelTemplate>
             </BitFileUpload>
+
+            <BitFileUpload @ref="fileUploadRef"
+                           AutoReset
+                           AutoUpload
+                           HideFileView
+                           Accept=".xlsx"
+                           MaxSize="1024 * 1024 * 50"
+                           UploadUrlProvider="GetBuilderUploadUrl"
+                           UploadRequestHttpHeadersProvider="GetBuilderUploadRequestHeaders"
+                           OnUploading="() => isBusy = true"
+                           OnUploadFailed="HandleUploadFailed"
+                           OnUploadComplete="HandleBuilderUploadComplete">
+                <LabelTemplate>
+                    <BitButton IconName="@BitIconName.Upload"
+                               Disabled="isBusy"
+                               OnClick="() => fileUploadRef.Browse()">Select Builder Excel file</BitButton>
+                </LabelTemplate>
+            </BitFileUpload>
+
             <BitButton IconName="@BitIconName.View"
                        Style="margin-top:15px;"
                        OnClick="GoToSummary">View Result</BitButton>
