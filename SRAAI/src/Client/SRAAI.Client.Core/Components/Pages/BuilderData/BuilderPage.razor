@@ -20,52 +20,107 @@
     }
     else
     {
-        <table class="table table-striped" border="1"
-               style="border: 2px solid #333; width: 100%; height: 400px; text-align: center; vertical-align: middle;">
-            <thead>
-                <tr>
-                    <th rowspan="2">अ. क्र.</th>
-                    <th colspan="2">मुळ परिसरातील झोप. क्र.</th>
-                    <th rowspan="2">मुळ परिसरातील झोपडीधारकाचे नाव</th>
-                    <th rowspan="2">विहीत जोडपत्र दाखल केलेल्या अर्जदाराचे नाव</th>
-                    <th colspan="3">मतदार यादीनमधील तपशील</th>
-                    <th rowspan="2">झोपडीचा वापर</th>
-                    <th rowspan="2">झोपडीखालील चटई क्षेत्र (चौ. फु.)</th>
-                    <th rowspan="2">अर्जदार यांनी अभय योजनेनुसार सादर केलेल्या प्रमुख पुराव्यांचा तपशील</th>
-                    <th rowspan="2">पात्र/ अपात्र/ अनिर्णित</th>
-                    <th rowspan="2">शेरा</th>
-                </tr>
-                <tr>
-                    <th>भाग क्र.</th>
-                    <th>म. झो. क्र.</th>
-                    <th>वर्ष</th>
-                    <th>भाग क्र.</th>
-                    <th>मतदार यादितील अ. क्र.</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in statistics)
-                {
-                    <tr>
-                        <td>@item.SerialNumber</td> 
-                        <td>@item.OriginalSlumNumber</td> 
-                        <td></td> 
-                        <td>@item.OriginalSlumDwellerName</td> 
-                        <td>@item.ApplicantName</td> 
-                        <td>@item.VoterListYear</td> 
-                        <td>@item.VoterListPartNumber</td> 
-                        <td>@item.VoterListSerialNumber</td> 
-                        <td>@item.SlumUsage</td>
-                        <td>@item.CarpetAreaSqFt</td> 
-                        <td>@item.EvidenceDetails</td> 
-                        <td>@item.EligibilityStatus</td> 
-                        <td>@item.Remarks</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <!-- ✅ Matching Records -->
+        <h4 style="color:green;">Matching Records</h4>
+        @RenderTable(statistics.Where(x => x.Status == "Matching"), "bg-success text-white")
+
+        <!-- 🟨 Not Found Records -->
+        <h4 style="color:orange;">Not Found Records (Present in DB but missing in Excel)</h4>
+        @RenderTable(statistics.Where(x => x.Status == "NotFound"), "bg-warning")
+
+        <!-- 🌸 Not Matching Records -->
+        <h4 style="color:deeppink;">Not Matching Records</h4>
+        @RenderTable(statistics.Where(x => x.Status == "NotMatching"), "bg-pink-100", true)
+
+        <!-- 🟥 Additional Records -->
+        <h4 style="color:red;">Additional Records (Present in Excel but missing in DB)</h4>
+        @RenderTable(statistics.Where(x => x.Status == "Additional"), "bg-danger text-white")
     }
+
     <BitButton IconName="@BitIconName.View"
                Style="margin-top:15px;"
                OnClick="Cancel">Cancel</BitButton>
 </section>
+
+@code {
+    private RenderFragment RenderTable(IEnumerable<AbhayYojanaApplicationDto> items, string rowClass, bool highlightCells = false) => __builder =>
+    {
+        if (items is null || !items.Any())
+        {
+            __builder.AddContent(0, "<p>No records.</p>");
+            return;
+        }
+
+        __builder.OpenElement(1, "table");
+        __builder.AddAttribute(2, "class", "table table-striped");
+        __builder.AddAttribute(3, "border", "1");
+        __builder.AddAttribute(4, "style", "border: 2px solid #333; width: 100%; text-align: center; vertical-align: middle; margin-bottom:20px;");
+        __builder.OpenElement(5, "thead");
+        __builder.AddMarkupContent(6, @"
+            <tr>
+                <th>अ. क्र.</th>
+                <th>म. झो. क्र.</th>
+                <th>झोपडीधारकाचे नाव</th>
+                <th>अर्जदाराचे नाव</th>
+                <th>वर्ष</th>
+                <th>भाग क्र.</th>
+                <th>मतदार यादितील अ. क्र.</th>
+                <th>झोपडीचा वापर</th>
+                <th>चटई क्षेत्र (चौ. फु.)</th>
+                <th>पुरावे</th>
+                <th>पात्रता</th>
+                <th>शेरा</th>
+            </tr>");
+        __builder.CloseElement(); // thead
+
+        __builder.OpenElement(7, "tbody");
+
+        int seq = 8;
+        foreach (var item in items)
+        {
+            __builder.OpenElement(seq++, "tr");
+            __builder.AddAttribute(seq++, "class", rowClass);
+
+            void Cell(string value, string? fieldName = null)
+            {
+                string cellClass = "";
+                if (highlightCells && item.ChangedFields?.Contains(fieldName ?? "") == true)
+                    cellClass = "bg-pink-300";
+
+                __builder.OpenElement(seq++, "td");
+                if (!string.IsNullOrEmpty(cellClass))
+                    __builder.AddAttribute(seq++, "class", cellClass);
+                __builder.AddContent(seq++, value);
+                __builder.CloseElement();
+            }
+
+            Cell(item.SerialNumber?.ToString() ?? "");
+            Cell(item.OriginalSlumNumber.ToString() ?? "", nameof(item.OriginalSlumNumber));
+            Cell(item.OriginalSlumDwellerName ?? "", nameof(item.OriginalSlumDwellerName));
+            Cell(item.ApplicantName ?? "", nameof(item.ApplicantName));
+            Cell(item.VoterListYear?.ToString() ?? "");
+            Cell(item.VoterListPartNumber?.ToString() ?? "");
+            Cell(item.VoterListSerialNumber?.ToString() ?? "");
+            Cell(item.SlumUsage ?? "", nameof(item.SlumUsage));
+            Cell(item.CarpetAreaSqFt?.ToString() ?? "");
+            Cell(item.EvidenceDetails ?? "");
+            Cell(item.EligibilityStatus ?? "");
+            Cell(item.Remarks ?? "");
+
+            __builder.CloseElement(); // tr
+        }
+
+        __builder.CloseElement(); // tbody
+        __builder.CloseElement(); // table
+    };
+}
+
+<style>
+    .bg-pink-100 {
+        background-color: #ffe6e6;
+    }
+
+    .bg-pink-300 {
+        background-color: #ffb3b3;
+    }
+</style>

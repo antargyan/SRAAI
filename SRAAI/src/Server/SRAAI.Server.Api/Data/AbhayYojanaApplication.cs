@@ -66,4 +66,8 @@ public class AbhayYojanaApplication
 
     [Column("Version")]
     public int Version { get; set; } = 1; // Version number for tracking Excel imports
+    [NotMapped]
+    public string Status { get; set; }
+    [NotMapped]
+    public List<string> ChangedFields { get; set; } = new();
 }

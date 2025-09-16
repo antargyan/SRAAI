@@ -141,9 +141,7 @@ public partial class AbhayYojanaController : AppControllerBase
     }
 
 
-    [HttpPost]
-    [RequestSizeLimit(50 * 1024 * 1024)]
-    public async Task<List<AbhayYojanaApplication>> BuilderExcelScanning(IFormFile file, CancellationToken cancellationToken)
+    public async Task<List<AbhayYojanaApplicationDto>> BuilderExcelScanning(IFormFile file, CancellationToken cancellationToken)
     {
         if (file is null || file.Length == 0)
             throw new BadRequestException("No file provided");
@@ -159,78 +157,122 @@ public partial class AbhayYojanaController : AppControllerBase
             IApplication application = excelEngine.Excel;
             application.DefaultVersion = ExcelVersion.Xlsx;
 
-            using (var inputStream = file.OpenReadStream())
+            using var inputStream = file.OpenReadStream();
+            IWorkbook workbook = application.Workbooks.Open(inputStream);
+            IWorksheet sheet1 = workbook.Worksheets[0];
+
+            int headerRow = 4;
+            int firstCol = sheet1.UsedRange.Column;
+            int lastCol = 13;
+            int lastRow = sheet1.UsedRange.LastRow;
+
+            DataTable customersTable = sheet1.ExportDataTable(
+                headerRow,
+                firstCol,
+                lastRow,
+                lastCol,
+                ExcelExportDataTableOptions.ColumnNames | ExcelExportDataTableOptions.ComputedFormulaValues);
+
+            var dbData = await DbContext.AbhayYojanaApplications.ToListAsync(cancellationToken);
+
+            List<AbhayYojanaApplicationDto> result = new();
+
+            // ----------------------------
+            // 1) Process Excel rows
+            // ----------------------------
+            for (int i = 0; i < customersTable.Rows.Count; i += 3)
             {
-                IWorkbook workbook = application.Workbooks.Open(inputStream);
-                IWorksheet sheet1 = workbook.Worksheets[0];
+                DataRow row = customersTable.Rows[i];
 
-                int headerRow = 4;
-                int firstCol = sheet1.UsedRange.Column;
-                int lastCol = 13;
-                int lastRow = sheet1.UsedRange.LastRow;
+                if (string.IsNullOrWhiteSpace(row[0]?.ToString())) break;
 
-                DataTable customersTable = sheet1.ExportDataTable(
-                    headerRow,
-                    firstCol,
-                    lastRow,
-                    lastCol,
-                    ExcelExportDataTableOptions.ColumnNames | ExcelExportDataTableOptions.ComputedFormulaValues);
+                int originalSlumNumber = Convert.ToInt32(row[1]?.ToString());
 
-                List<AbhayYojanaApplication> diff = new List<AbhayYojanaApplication>();
-
-                for (int i = 0; i < customersTable.Rows.Count; i += 3)
+                var dto = new AbhayYojanaApplicationDto
                 {
-                    DataRow row = customersTable.Rows[i];
-                    if (string.IsNullOrWhiteSpace(row[0]?.ToString()))
-                        break;
+                    OriginalSlumNumber = originalSlumNumber,
+                    SerialNumber = Convert.ToInt32(row[0]?.ToString()),
+                    OriginalSlumDwellerName = row[2]?.ToString() ?? string.Empty,
+                    ApplicantName = row[3]?.ToString() ?? string.Empty,
+                    VoterListYear = int.TryParse(row[4]?.ToString(), out int year) ? year : (int?)null,
+                    VoterListPartNumber = row[5]?.ToString(),
+                    VoterListSerialNumber = int.TryParse(row[6]?.ToString(), out int serial) ? serial : (int?)null,
+                    VoterListBound = row[7]?.ToString(),
+                    SlumUsage = row[8]?.ToString() ?? string.Empty,
+                    CarpetAreaSqFt = decimal.TryParse(row[9]?.ToString(), out decimal area) ? area : (decimal?)null,
+                    EvidenceDetails = row[10]?.ToString() ?? string.Empty,
+                    EligibilityStatus = row[11]?.ToString() ?? string.Empty,
+                    Remarks = row[12]?.ToString(),
+                };
 
-                    int originalSlumNumber = Convert.ToInt32(row[1]?.ToString());
+                var originaldata = dbData.FirstOrDefault(a => a.OriginalSlumNumber == originalSlumNumber);
 
-                    var originaldata = await DbContext.AbhayYojanaApplications
-                        .FirstOrDefaultAsync(a => a.OriginalSlumNumber == originalSlumNumber, cancellationToken);
+                if (originaldata != null)
+                {
+                    var changed = new List<string>();
 
-                    var dto = new AbhayYojanaApplication
+                    if (originaldata.SerialNumber != dto.SerialNumber) changed.Add(nameof(dto.SerialNumber));
+                    if (originaldata.OriginalSlumDwellerName != dto.OriginalSlumDwellerName) changed.Add(nameof(dto.OriginalSlumDwellerName));
+                    if (originaldata.ApplicantName != dto.ApplicantName) changed.Add(nameof(dto.ApplicantName));
+                    if (originaldata.SlumUsage != dto.SlumUsage) changed.Add(nameof(dto.SlumUsage));
+                    if (originaldata.EvidenceDetails != dto.EvidenceDetails) changed.Add(nameof(dto.EvidenceDetails));
+                    if (originaldata.EligibilityStatus != dto.EligibilityStatus) changed.Add(nameof(dto.EligibilityStatus));
+                    if (originaldata.Remarks != dto.Remarks) changed.Add(nameof(dto.Remarks));
+
+                    if (changed.Any())
                     {
-                        OriginalSlumNumber = originalSlumNumber,
-                        SerialNumber = Convert.ToInt32(row[0]?.ToString()),
-                        OriginalSlumDwellerName = row[2]?.ToString() ?? string.Empty,
-                        ApplicantName = row[3]?.ToString() ?? string.Empty,
-                        VoterListYear = int.TryParse(row[4]?.ToString(), out int year) ? year : (int?)null,
-                        VoterListPartNumber = row[5]?.ToString(),
-                        VoterListSerialNumber = int.TryParse(row[6]?.ToString(), out int serial) ? serial : (int?)null,
-                        VoterListBound = row[7]?.ToString(),
-                        SlumUsage = row[8]?.ToString() ?? string.Empty,
-                        CarpetAreaSqFt = decimal.TryParse(row[9]?.ToString(), out decimal area) ? area : (decimal?)null,
-                        EvidenceDetails = row[10]?.ToString() ?? string.Empty,
-                        EligibilityStatus = row[11]?.ToString() ?? string.Empty,
-                        Remarks = row[12]?.ToString(),
-                        CreatedDate = DateTime.UtcNow,
-                    };
-
-                    if (originaldata != null)
-                    {
-                        if (originaldata.OriginalSlumNumber != dto.OriginalSlumNumber ||
-                            originaldata.SerialNumber != dto.SerialNumber ||
-                            originaldata.OriginalSlumDwellerName != dto.OriginalSlumDwellerName ||
-                            originaldata.ApplicantName != dto.ApplicantName ||
-                            originaldata.SlumUsage != dto.SlumUsage ||
-                            originaldata.EvidenceDetails != dto.EvidenceDetails ||
-                            originaldata.EligibilityStatus != dto.EligibilityStatus ||
-                            originaldata.Remarks != dto.Remarks)
-                        {
-                            diff.Add(dto);
-                        }
+                        dto.Status = "NotMatching";
+                        dto.ChangedFields = changed;
                     }
                     else
                     {
-                        diff.Add(dto);
+                        dto.Status = "Matching";
                     }
                 }
+                else
+                {
+                    dto.Status = "Additional"; // present in Excel but not DB
+                }
 
-                return diff;
+                result.Add(dto);
             }
+
+            // ----------------------------
+            // 2) Find NotFound (DB-only)
+            // ----------------------------
+            var excelSlumNumbers = customersTable.Rows
+     .Cast<DataRow>()
+     .Select(r => r[1]?.ToString())
+     .Where(s => !string.IsNullOrWhiteSpace(s) && int.TryParse(s, out _))
+     .Select(s => int.Parse(s!))
+     .ToHashSet();
+
+
+            var notFound = dbData
+                .Where(db => !excelSlumNumbers.Contains(db.OriginalSlumNumber))
+                .Select(db => new AbhayYojanaApplicationDto
+                {
+                    OriginalSlumNumber = db.OriginalSlumNumber,
+                    SerialNumber = db.SerialNumber,
+                    OriginalSlumDwellerName = db.OriginalSlumDwellerName,
+                    ApplicantName = db.ApplicantName,
+                    VoterListYear = db.VoterListYear,
+                    VoterListPartNumber = db.VoterListPartNumber,
+                    VoterListSerialNumber = db.VoterListSerialNumber,
+                    SlumUsage = db.SlumUsage,
+                    CarpetAreaSqFt = db.CarpetAreaSqFt,
+                    EvidenceDetails = db.EvidenceDetails,
+                    EligibilityStatus = db.EligibilityStatus,
+                    Remarks = db.Remarks,
+                    Status = "NotFound"
+                });
+
+            result.AddRange(notFound);
+
+            return result;
         }
     }
+
 
 
     [HttpGet]

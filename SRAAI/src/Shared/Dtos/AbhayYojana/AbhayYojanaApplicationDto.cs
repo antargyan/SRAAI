@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SRAAI.Shared.Dtos.AbhayYojana;
 
@@ -48,6 +48,10 @@ public class AbhayYojanaApplicationDto
     public DateTime? UpdatedDate { get; set; }
     
     public int Version { get; set; } = 1;
+    [NotMapped]
+    public string Status { get; set; }
+    [NotMapped]
+    public List<string> ChangedFields { get; set; } = new();
 }
 
 public class CreateAbhayYojanaApplicationDto
