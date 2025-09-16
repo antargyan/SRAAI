@@ -54,6 +54,7 @@
         <PackageReference Include="AspNet.Security.OAuth.Apple" />
         <PackageReference Include="AspNet.Security.OAuth.GitHub" />
         <PackageReference Include="Riok.Mapperly" />
+        <PackageReference Include="Syncfusion.XlsIO.Net.Core" />
         <PackageReference Include="Twilio" />
         <PackageReference Include="AdsPush" />
         <PackageReference Include="Microsoft.Extensions.AI" />

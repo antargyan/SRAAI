@@ -1,8 +1,11 @@
+﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SRAAI.Server.Api.Data;
 using SRAAI.Server.Api.Services.AbhayYojana;
 using SRAAI.Shared.Dtos.AbhayYojana;
+using SRAAI.Shared.Dtos.Summary;
+using Syncfusion.XlsIO;
 
 namespace SRAAI.Server.Api.Controllers.AbhayYojana;
 
@@ -15,7 +18,7 @@ public partial class AbhayYojanaController : AppControllerBase
     [HttpPost]
     [RequestSizeLimit(50 * 1024 * 1024)]
     public async Task<IActionResult> ImportExcel(IFormFile file, CancellationToken cancellationToken = default)
-    {
+     {
         try
         {
             if (file is null || file.Length == 0)
@@ -24,22 +27,113 @@ public partial class AbhayYojanaController : AppControllerBase
             if (!file.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
                 throw new BadRequestException("Only Excel (.xlsx) files are supported");
 
-            if (file.Length > 50 * 1024 * 1024) // 50MB limit
+            if (file.Length > 50 * 1024 * 1024)
                 throw new BadRequestException("File size exceeds 50MB limit");
 
-            await using var stream = file.OpenReadStream();
-            var result = await excelImportService.ImportFromExcelAsync(stream, cancellationToken);
-            
-            return Ok(result);
+            using (ExcelEngine excelEngine = new ExcelEngine())
+            {
+                IApplication application = excelEngine.Excel;
+                application.DefaultVersion = ExcelVersion.Xlsx;
+
+                using (var inputStream = file.OpenReadStream())
+                {
+                    IWorkbook workbook = application.Workbooks.Open(inputStream);
+
+                    // Get first worksheet
+                    IWorksheet sheet1 = workbook.Worksheets[0];
+                    // Get second worksheet (assuming it exists)
+                    //IWorksheet sheet2 = workbook.Worksheets.Count > 1 ? workbook.Worksheets[1] : null;
+
+                    /* if (sheet2 == null)
+                         throw new BadRequestException("Excel file must have at least 2 sheets.");
+ */
+                    int headerRow = 4;
+                    int firstCol = sheet1.UsedRange.Column;
+                    int lastCol = 13;
+                    int lastRow = sheet1.UsedRange.LastRow;
+
+                    DataTable customersTable = sheet1.ExportDataTable(
+                        headerRow,
+                        firstCol,
+                        lastRow,
+                        lastCol,
+                        ExcelExportDataTableOptions.ColumnNames | ExcelExportDataTableOptions.ComputedFormulaValues);
+
+                    /*   DataTable builderTable = sheet2.ExportDataTable(
+                           headerRow,
+                           firstCol,
+                           lastRow,
+                           lastCol,
+                           ExcelExportDataTableOptions.ColumnNames | ExcelExportDataTableOptions.ComputedFormulaValues);*/
+
+                    for (int i = 0; i < customersTable.Rows.Count; i += 3)
+                    {
+                        DataRow row = customersTable.Rows[i];
+                        if (string.IsNullOrWhiteSpace(row[0]?.ToString()))
+                            break;
+
+                        int originalSlumNumber = Convert.ToInt32(row[1]?.ToString());
+
+                        var presentdata = await DbContext.AbhayYojanaApplications
+                            .FirstOrDefaultAsync(a => a.OriginalSlumNumber == originalSlumNumber);
+
+                        if (presentdata == null)
+                        {
+                         
+                            var dto = new AbhayYojanaApplication
+                            {
+                                OriginalSlumNumber = originalSlumNumber,
+                                SerialNumber = Convert.ToInt32(row[0]?.ToString()),
+                                OriginalSlumDwellerName = row[2]?.ToString() ?? string.Empty,
+                                ApplicantName = row[3]?.ToString() ?? string.Empty,
+                                VoterListYear = int.TryParse(row[4]?.ToString(), out int year) ? year : (int?)null,   
+                                VoterListPartNumber = row[5]?.ToString(),
+                                VoterListSerialNumber = int.TryParse(row[6]?.ToString(), out int serial) ? serial : (int?)null, 
+                                VoterListBound = row[7]?.ToString(),
+                                SlumUsage = row[8]?.ToString() ?? string.Empty,
+                                CarpetAreaSqFt = decimal.TryParse(row[9]?.ToString(), out decimal area) ? area : (decimal?)null,
+                                EvidenceDetails = row[10]?.ToString() ?? string.Empty,
+                                EligibilityStatus = row[11]?.ToString() ?? string.Empty,
+                                Remarks = row[12]?.ToString(),
+                                CreatedDate = DateTime.UtcNow,
+                            };
+
+                            await DbContext.AbhayYojanaApplications.AddAsync(dto);
+                        }
+                        else
+                        {
+                           
+                            presentdata.SerialNumber = Convert.ToInt32(row[0]?.ToString());
+                            presentdata.OriginalSlumDwellerName = row[2]?.ToString() ?? string.Empty;
+                            presentdata.ApplicantName = row[3]?.ToString() ?? string.Empty;
+                            presentdata.VoterListYear = int.TryParse(row[4]?.ToString(), out int year) ? year : (int?)null;
+                            presentdata.VoterListPartNumber = row[5]?.ToString();
+                            presentdata.VoterListSerialNumber = int.TryParse(row[6]?.ToString(), out int serial) ? serial : (int?)null;
+                            presentdata.VoterListBound = row[7]?.ToString();
+                            presentdata.SlumUsage = row[8]?.ToString() ?? string.Empty;
+                            presentdata.CarpetAreaSqFt = decimal.TryParse(row[9]?.ToString(), out decimal area) ? area : (decimal?)null;
+                            presentdata.EvidenceDetails = row[10]?.ToString() ?? string.Empty;
+                            presentdata.EligibilityStatus = row[11]?.ToString() ?? string.Empty;
+                            presentdata.Remarks = row[12]?.ToString();
+                            presentdata.UpdatedDate = DateTime.UtcNow;
+
+                      
+                        }
+                        await DbContext.SaveChangesAsync();
+                    }
+
+
+                    return Ok(new { message = "Excel imported successfully" });
+                }
+            }
         }
         catch (Exception ex)
         {
-            // Log the exception for debugging
-            // You can add proper logging here
-            return BadRequest(new { 
-                error = "Import failed", 
+            return BadRequest(new
+            {
+                error = "Import failed",
                 message = ex.Message,
-                details = ex.StackTrace 
+                details = ex.StackTrace
             });
         }
     }
@@ -240,4 +334,58 @@ public partial class AbhayYojanaController : AppControllerBase
                 .MaxAsync(a => (DateTime?)a.UpdatedDate ?? a.CreatedDate, cancellationToken)
         });
     }
+
+    [HttpGet]
+    public async Task<List<SummaryDto>> Summary(CancellationToken cancellationToken)
+    {
+        var data = await DbContext.AbhayYojanaApplications.ToListAsync(cancellationToken);
+
+        // Fixed categories you want to show
+        var categories = new[] { "पात्र", "अपात्र", "अनिर्णित" };
+        var result = new List<SummaryDto>();
+
+        foreach (var cat in categories)
+        {
+            var rows = data.Where(x =>
+            {
+                if (string.IsNullOrWhiteSpace(x.EligibilityStatus))
+                    return false;
+
+                var status = x.EligibilityStatus.Trim();
+
+                // Normalize DB values
+                if (status == "पात्र नाही")
+                    status = "अपात्र";
+
+                return status.Equals(cat, StringComparison.OrdinalIgnoreCase);
+            });
+
+            result.Add(new SummaryDto
+            {
+                Category = cat,
+                Nivasi = rows.Count(x => !string.IsNullOrWhiteSpace(x.SlumUsage) &&
+                                         x.SlumUsage.Trim().Equals("निवासी", StringComparison.OrdinalIgnoreCase)),
+                Anivasi = rows.Count(x => !string.IsNullOrWhiteSpace(x.SlumUsage) &&
+                                          x.SlumUsage.Trim().Equals("अनिवासी", StringComparison.OrdinalIgnoreCase)),
+                Samyukt = rows.Count(x => !string.IsNullOrWhiteSpace(x.SlumUsage) &&
+                                          x.SlumUsage.Trim().Equals("संयुक्त", StringComparison.OrdinalIgnoreCase)),
+                Dharsthal = rows.Count(x => !string.IsNullOrWhiteSpace(x.SlumUsage) &&
+                                            x.SlumUsage.Trim().Equals("धारस्थळ", StringComparison.OrdinalIgnoreCase))
+            });
+        }
+
+        // Add total row
+        result.Add(new SummaryDto
+        {
+            Category = "एकूण",
+            Nivasi = result.Sum(r => r.Nivasi),
+            Anivasi = result.Sum(r => r.Anivasi),
+            Samyukt = result.Sum(r => r.Samyukt),
+            Dharsthal = result.Sum(r => r.Dharsthal)
+        });
+
+        return result;
+    }
+
+
 }

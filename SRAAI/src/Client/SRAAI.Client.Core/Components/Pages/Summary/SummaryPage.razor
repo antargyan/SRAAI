@@ -1,0 +1,50 @@
+@attribute [Route(PageUrls.SummaryPage)]
+@attribute [Route("{culture?}" + PageUrls.SummaryPage)]
+@attribute [Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)]
+@inherits AppPageBase
+
+@using SRAAI.Shared.Dtos.Summary
+
+<AppPageData Title="Summary List"
+             PageTitle="Summary List" />
+
+<section>
+    @if (isLoadingStatistics)
+    {
+        <p><em>Loading statistics...</em></p>
+    }
+    else if (statistics is null || !statistics.Any())
+    {
+        <p>No data available.</p>
+    }
+    else
+    {
+        <table class="table table-striped" border="1"
+               style="border: 2px solid #333; width: 100%; height: 400px; text-align: center; vertical-align: middle;">
+
+            <thead>
+                <tr>
+                    <th>वापर</th>
+                    <th>निवासी</th>
+                    <th>अनिवासी</th>
+                    <th>संयुक्त</th>
+                    <th>धारस्थळ</th>
+                    <th>एकूण</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in statistics)
+                {
+                    <tr>
+                        <td>@item.Category</td>
+                        <td>@item.Nivasi</td>
+                        <td>@item.Anivasi</td>
+                        <td>@item.Samyukt</td>
+                        <td>@item.Dharsthal</td>
+                        <td>@item.Total</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</section>

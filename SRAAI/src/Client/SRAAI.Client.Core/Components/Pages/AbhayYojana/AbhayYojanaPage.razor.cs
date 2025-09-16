@@ -1,4 +1,4 @@
-using Bit.BlazorUI;
+﻿using Bit.BlazorUI;
 using Microsoft.AspNetCore.Components;
 using SRAAI.Shared.Dtos.AbhayYojana;
 using System.Text.Json;
@@ -47,7 +47,18 @@ public partial class AbhayYojanaPage : AppPageBase
             StateHasChanged();
         }
     }
+    private async void GoToSummary()
+    {
+        try
+        {
+            NavigationManager.NavigateTo($"{PageUrls.SummaryPage}");
+        }
+        catch
+        {
 
+        }
+
+    }
     private async Task LoadStatistics()
     {
         try

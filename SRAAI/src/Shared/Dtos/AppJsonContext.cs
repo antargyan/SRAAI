@@ -6,6 +6,7 @@ using SRAAI.Shared.Dtos.Identity;
 using SRAAI.Shared.Dtos.Statistics;
 using SRAAI.Shared.Dtos.Diagnostic;
 using SRAAI.Shared.Dtos.AbhayYojana;
+using SRAAI.Shared.Dtos.Summary;
 
 namespace SRAAI.Shared.Dtos;
 
@@ -37,6 +38,10 @@ namespace SRAAI.Shared.Dtos;
 [JsonSerializable(typeof(AbhayYojanaApplicationDto))]
 [JsonSerializable(typeof(CreateAbhayYojanaApplicationDto))]
 [JsonSerializable(typeof(UpdateAbhayYojanaApplicationDto))]
+
+[JsonSerializable(typeof(SummaryDto))]
+[JsonSerializable(typeof(List<SummaryDto>))]
+[JsonSerializable(typeof(PagedResult<SummaryDto>))]
 public partial class AppJsonContext : JsonSerializerContext
 {
 }

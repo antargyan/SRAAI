@@ -33,7 +33,9 @@
                                OnClick="() => fileUploadRef.Browse()">Select Excel file</BitButton>
                 </LabelTemplate>
             </BitFileUpload>
-            
+            <BitButton IconName="@BitIconName.View"
+                       Style="margin-top:15px;"
+                       OnClick="GoToSummary">View Result</BitButton>
             <BitText>
                 <strong>Excel File Requirements:</strong><br/>
                 • File must be in .xlsx format<br/>
