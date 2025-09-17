@@ -1,13 +1,11 @@
-﻿using Bit.BlazorUI;
-using Microsoft.AspNetCore.Components;
-using SRAAI.Shared.Dtos.AbhayYojana;
-using System.Text.Json;
+﻿using SRAAI.Shared.Dtos.AbhayYojana;
 
 namespace SRAAI.Client.Core.Components.Pages.AbhayYojana;
 
 public partial class AbhayYojanaPage : AppPageBase
 {
     private BitFileUpload fileUploadRef = default!;
+    private BitFileUpload fileUploadRef2 = default!;
     private bool isBusy = false;
     private bool isLoadingApplications = false;
     private bool isLoadingStatistics = false;
@@ -115,9 +113,7 @@ public partial class AbhayYojanaPage : AppPageBase
     {
         isBusy = false;
         try
-        {
-            DataService.applications = JsonSerializer.Deserialize<List<AbhayYojanaApplicationDto>>(info.Message!, JsonSerializerOptions);
-            // Refresh data after successful import
+        { 
             await LoadApplications();
             await LoadStatistics();
             

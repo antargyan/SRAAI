@@ -13,8 +13,9 @@
 <section>
     <BitStack Gap="16">
         <!-- Import Section -->
-        <BitStack Gap="8">
-            <BitText typography="BitTypography.Subtitle1">Import Excel Data</BitText>
+        <BitText typography="BitTypography.Subtitle1">Import Excel Data</BitText>
+        <BitStack Horizontal HorizontalAlign="BitAlignment.Start" Gap="10px">
+          
             
             <BitFileUpload @ref="fileUploadRef"
                        AutoReset
@@ -34,7 +35,7 @@
                 </LabelTemplate>
             </BitFileUpload>
 
-            <BitFileUpload @ref="fileUploadRef"
+            <BitFileUpload @ref="fileUploadRef2"
                            AutoReset
                            AutoUpload
                            HideFileView
@@ -48,117 +49,13 @@
                 <LabelTemplate>
                     <BitButton IconName="@BitIconName.Upload"
                                Disabled="isBusy"
-                               OnClick="() => fileUploadRef.Browse()">Select Builder Excel file</BitButton>
+                               OnClick="() => fileUploadRef2.Browse()">Select Builder Excel file</BitButton>
                 </LabelTemplate>
             </BitFileUpload>
 
             <BitButton IconName="@BitIconName.View"
-                       Style="margin-top:15px;"
                        OnClick="GoToSummary">View Result</BitButton>
-            <BitText>
-                <strong>Excel File Requirements:</strong><br/>
-                • File must be in .xlsx format<br/>
-                • Column B (Original Slum Number) will be used as the primary key<br/>
-                • Column L (Eligibility Status) must not be empty - rows with empty Column L will be skipped<br/>
-                • Required columns: Original Slum Number, Original Slum Dweller Name, Applicant Name, Slum Usage, Evidence Details, Eligibility Status
-            </BitText>
+           
         </BitStack>
-
-        <!-- Import Results -->
-        @if (lastImportResult is not null)
-        {
-            <BitStack Gap="8">
-                <BitText typography="BitTypography.Subtitle1">Import Results</BitText>
-                <BitStack Gap="4">
-                    <BitText>Total Rows: <b>@lastImportResult.TotalRows</b></BitText>
-                    <BitText>Successfully Imported: <b>@lastImportResult.SuccessfullyImported</b></BitText>
-                    <BitText>Skipped Rows: <b>@lastImportResult.SkippedRows</b></BitText>
-                    
-                    @if (lastImportResult.Errors.Any())
-                    {
-                        <BitText>Errors:</BitText>
-                        @foreach (var error in lastImportResult.Errors)
-                        {
-                            <BitText>• @error</BitText>
-                        }
-                    }
-                    
-                    @if (lastImportResult.Warnings.Any())
-                    {
-                        <BitText>Warnings:</BitText>
-                        @foreach (var warning in lastImportResult.Warnings)
-                        {
-                            <BitText>• @warning</BitText>
-                        }
-                    }
-                </BitStack>
-            </BitStack>
-        }
-
-        <!-- Statistics -->
-        @if (statistics is not null)
-        {
-            <BitStack Gap="8">
-                <BitText typography="BitTypography.Subtitle1">Statistics</BitText>
-                <BitStack Gap="4">
-                    <BitText>Total Applications: <b>@statistics.TotalApplications</b></BitText>
-                    @if (statistics.LastUpdated.HasValue)
-                    {
-                        <BitText>Last Updated: <b>@statistics.LastUpdated.Value.ToString("yyyy-MM-dd HH:mm")</b></BitText>
-                    }
-                    
-                    @if (statistics.StatusBreakdown.Any())
-                    {
-                        <BitText>Status Breakdown:</BitText>
-                        @foreach (var status in statistics.StatusBreakdown)
-                        {
-                            <BitText>• @status.Status: <b>@status.Count</b></BitText>
-                        }
-                    }
-                </BitStack>
-            </BitStack>
-        }
-
-        <!-- Data Grid -->
-        <BitStack Gap="8">
-            <BitStack Orientation="BitOrientation.Horizontal" Gap="8" AlignItems="BitAlignItems.Center">
-                <BitText typography="BitTypography.Subtitle1">Applications</BitText>
-                <BitButton IconName="@BitIconName.Refresh" 
-                           Size="BitSize.Small"
-                           OnClick="LoadApplications">Refresh</BitButton>
-            </BitStack>
-            
-            @if (isLoadingApplications)
-            {
-                <BitSlickBarsLoading />
-            }
-            else if (applications is not null && applications.Any())
-            {
-                <BitDataGrid TGridItem="AbhayYojanaApplicationDto" 
-                            Items="applications.AsQueryable()" 
-                            Class="abhay-yojana-grid">
-                    <BitDataGridPropertyColumn Title="Serial No" Property="a => a.SerialNumber" />
-                    <BitDataGridPropertyColumn Title="Slum Number" Property="a => a.OriginalSlumNumber" />
-                    <BitDataGridPropertyColumn Title="Original Dweller" Property="a => a.OriginalSlumDwellerName" />
-                    <BitDataGridPropertyColumn Title="Applicant Name" Property="a => a.ApplicantName" />
-                    <BitDataGridPropertyColumn Title="Voter Year" Property="a => a.VoterListYear" />
-                    <BitDataGridPropertyColumn Title="Voter Part" Property="a => a.VoterListPartNumber" />
-                    <BitDataGridPropertyColumn Title="Voter Serial" Property="a => a.VoterListSerialNumber" />
-                    <BitDataGridPropertyColumn Title="Voter Bound" Property="a => a.VoterListBound" />
-                    <BitDataGridPropertyColumn Title="Slum Usage" Property="a => a.SlumUsage" />
-                    <BitDataGridPropertyColumn Title="Carpet Area (Sq Ft)" Property="a => a.CarpetAreaSqFt" />
-                    <BitDataGridPropertyColumn Title="Evidence Details" Property="a => a.EvidenceDetails" />
-                    <BitDataGridPropertyColumn Title="Eligibility Status" Property="a => a.EligibilityStatus" />
-                    <BitDataGridPropertyColumn Title="Remarks" Property="a => a.Remarks" />
-                    <BitDataGridPropertyColumn Title="Version" Property="a => a.Version" />
-                    <BitDataGridPropertyColumn Title="Created Date" Property="a => a.CreatedDate" />
-                    <BitDataGridPropertyColumn Title="Updated Date" Property="a => a.UpdatedDate" />
-                </BitDataGrid>
-            }
-            else
-            {
-                <BitText>No applications found. Import an Excel file to get started.</BitText>
-            }
         </BitStack>
-    </BitStack>
 </section>
