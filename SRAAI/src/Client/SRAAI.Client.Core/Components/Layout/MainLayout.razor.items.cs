@@ -24,14 +24,14 @@ public partial class MainLayout
 
         if (dashboard || manageProductCatalog)
         {
-            BitNavItem adminPanelItem = new()
+           /* BitNavItem adminPanelItem = new()
             {
                 Text = localizer[nameof(AppStrings.AdminPanel)],
                 IconName = BitIconName.Admin,
                 ChildItems = []
             };
 
-            navPanelItems.Add(adminPanelItem);
+            navPanelItems.Add(adminPanelItem);*/
 
             BitNavItem abhayyoganaPanelItem = new()
             {
@@ -42,7 +42,7 @@ public partial class MainLayout
 
             navPanelItems.Add(abhayyoganaPanelItem);
 
-            if (dashboard)
+           /* if (dashboard)
             {
                 adminPanelItem.ChildItems.Add(new()
                 {
@@ -50,11 +50,11 @@ public partial class MainLayout
                     IconName = BitIconName.BarChartVerticalFill,
                     Url = PageUrls.Dashboard,
                 });
-            }
+            }*/
 
             if (manageProductCatalog)
             {
-                adminPanelItem.ChildItems.AddRange(
+               /* adminPanelItem.ChildItems.AddRange(
                 [
                     new()
                         {
@@ -68,7 +68,7 @@ public partial class MainLayout
                             IconName = BitIconName.Product,
                             Url = PageUrls.Products,
                         }
-                ]);
+                ]);*/
 
                 abhayyoganaPanelItem.ChildItems.AddRange(
                 [
@@ -90,7 +90,7 @@ public partial class MainLayout
 
 
 
-        navPanelItems.Add(new()
+       /* navPanelItems.Add(new()
         {
             Text = localizer[nameof(AppStrings.Terms)],
             IconName = BitIconName.EntityExtraction,
@@ -102,13 +102,13 @@ public partial class MainLayout
             Text = localizer[nameof(AppStrings.About)],
             IconName = BitIconName.Info,
             Url = PageUrls.About,
-        });
+        });*/
 
         var (manageRoles, manageUsers, manageAiPrompt) = await (authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.Management.ManageRoles),
             authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.Management.ManageUsers),
             authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.Management.ManageAiPrompt));
 
-        if (manageRoles || manageUsers || manageAiPrompt)
+     /*   if (manageRoles || manageUsers || manageAiPrompt)
         {
             BitNavItem managementItem = new()
             {
@@ -139,7 +139,7 @@ public partial class MainLayout
                 });
             }
 
-        }
+        }*/
 
         if (authUser.IsAuthenticated())
         {
