@@ -1,14 +1,8 @@
 ﻿using System.Data;
-using DocumentFormat.OpenXml.Office2010.ExcelAc;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SRAAI.Server.Api.Data;
 using SRAAI.Server.Api.Services.AbhayYojana;
 using SRAAI.Shared.Dtos.AbhayYojana;
-using SRAAI.Shared.Dtos.Categories;
 using SRAAI.Shared.Dtos.Summary;
 using Syncfusion.XlsIO;
-using Syncfusion.XlsIO.Implementation.Security;
 
 namespace SRAAI.Server.Api.Controllers.AbhayYojana;
 
@@ -98,7 +92,7 @@ public partial class AbhayYojanaController : AppControllerBase
                                 EvidenceDetails = row[10]?.ToString() ?? string.Empty,
                                 EligibilityStatus = row[11]?.ToString() ?? string.Empty,
                                 Remarks = row[12]?.ToString(),
-                                CreatedDate = DateTime.UtcNow,
+                                CreatedDate = DateTime.Now,
                             };
 
                             await DbContext.AbhayYojanaApplications.AddAsync(dto);
@@ -118,7 +112,7 @@ public partial class AbhayYojanaController : AppControllerBase
                             presentdata.EvidenceDetails = row[10]?.ToString() ?? string.Empty;
                             presentdata.EligibilityStatus = row[11]?.ToString() ?? string.Empty;
                             presentdata.Remarks = row[12]?.ToString();
-                            presentdata.UpdatedDate = DateTime.UtcNow;
+                            presentdata.UpdatedDate = DateTime.Now;
 
                       
                         }
