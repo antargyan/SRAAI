@@ -10,6 +10,28 @@
              PageTitle="Summary List" />
 
 <section>
+
+    <BitStack Horizontal HorizontalAlign="BitAlignment.Start" Gap="10px">
+        <BitFileUpload @ref="fileUploadRef2"
+                       AutoReset
+                       AutoUpload
+                       HideFileView
+                       Accept=".xlsx"
+                       MaxSize="1024 * 1024 * 50"
+                       UploadUrlProvider="GetBuilderUploadUrl"
+                       UploadRequestHttpHeadersProvider="GetBuilderUploadRequestHeaders"
+                       OnUploading="() => isBusy = true"
+                       OnUploadFailed="HandleUploadFailed"
+                       OnUploadComplete="HandleBuilderUploadComplete">
+            <LabelTemplate>
+                <BitButton IconName="@BitIconName.Upload"
+                           Disabled="isBusy"
+                           OnClick="() => fileUploadRef2.Browse()">Select Builder Excel file</BitButton>
+            </LabelTemplate>
+        </BitFileUpload>
+
+    </BitStack>
+
     @if (isLoadingStatistics)
     {
         <p>Loading data...</p>
@@ -20,19 +42,16 @@
     }
     else
     {
-        <!-- ✅ Matching Records -->
+    
         <h4 style="color:green;">Matching Records</h4>
         @RenderTable(statistics.Where(x => x.Status == "Matching"), "bg-success text-white")
 
-        <!-- 🟨 Not Found Records -->
         <h4 style="color:orange;">Not Found Records (Present in DB but missing in Excel)</h4>
         @RenderTable(statistics.Where(x => x.Status == "NotFound"), "bg-warning")
 
-        <!-- 🌸 Not Matching Records -->
         <h4 style="color:deeppink;">Not Matching Records</h4>
         @RenderTable(statistics.Where(x => x.Status == "NotMatching"), "bg-pink-100", true)
 
-        <!-- 🟥 Additional Records -->
         <h4 style="color:red;">Additional Records (Present in Excel but missing in DB)</h4>
         @RenderTable(statistics.Where(x => x.Status == "Additional"), "bg-danger text-white")
     }
@@ -47,7 +66,7 @@
     {
         if (items is null || !items.Any())
         {
-            __builder.AddContent(0, "<p>No records.</p>");
+            __builder.AddContent(0, "No records.");
             return;
         }
 
@@ -107,11 +126,11 @@
             Cell(item.EligibilityStatus ?? "");
             Cell(item.Remarks ?? "");
 
-            __builder.CloseElement(); // tr
+            __builder.CloseElement(); 
         }
 
-        __builder.CloseElement(); // tbody
-        __builder.CloseElement(); // table
+        __builder.CloseElement(); 
+        __builder.CloseElement(); 
     };
 }
 

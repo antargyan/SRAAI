@@ -5,7 +5,7 @@ namespace SRAAI.Client.Core.Components.Pages.AbhayYojana;
 public partial class AbhayYojanaPage : AppPageBase
 {
     private BitFileUpload fileUploadRef = default!;
-    private BitFileUpload fileUploadRef2 = default!;
+
     private bool isBusy = false;
     private bool isLoadingApplications = false;
     private bool isLoadingStatistics = false;
@@ -88,20 +88,6 @@ public partial class AbhayYojanaPage : AppPageBase
         var token = await AuthManager.GetFreshAccessToken(requestedBy: nameof(BitFileUpload));
         return new() { { "Authorization", $"Bearer {token}" } };
     }
-
-
-    private async Task<string> GetBuilderUploadUrl()
-    {
-        return new Uri(AbsoluteServerAddress, "/api/AbhayYojana/BuilderExcelScanning").ToString();
-    }
-
-    private async Task<Dictionary<string, string>> GetBuilderUploadRequestHeaders()
-    {
-        var token = await AuthManager.GetFreshAccessToken(requestedBy: nameof(BitFileUpload));
-        return new() { { "Authorization", $"Bearer {token}" } };
-    }
-
-
     private Task HandleUploadFailed(BitFileInfo info)
     {
         isBusy = false;
@@ -129,21 +115,7 @@ public partial class AbhayYojanaPage : AppPageBase
         }
     }
 
-    private async Task HandleBuilderUploadComplete(BitFileInfo info)
-    {
-        isBusy = false;
-        try
-        {
-            DataService.applications = JsonSerializer.Deserialize<List<AbhayYojanaApplicationDto>>(info.Message!, JsonSerializerOptions);
-            NavigationManager.NavigateTo($"{PageUrls.BuilderPage}");
-
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            SnackBarService.Error($"Failed to process import result: {ex.Message}");
-        }
-    }
+  
 }
 
 public record AbhayYojanaImportResult(
@@ -154,13 +126,13 @@ public record AbhayYojanaImportResult(
     List<string> Warnings
 );
 
-public record AbhayYojanaPagedResult(
+/*public record AbhayYojanaPagedResult(
     List<AbhayYojanaApplicationDto> Data,
     int TotalCount,
     int Page,
     int PageSize,
     int TotalPages
-);
+);*/
 
 public record AbhayYojanaStatistics(
     int TotalApplications,

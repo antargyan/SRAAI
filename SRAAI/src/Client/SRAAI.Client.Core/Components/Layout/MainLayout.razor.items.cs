@@ -19,7 +19,6 @@ public partial class MainLayout
             }
         ];
 
-
         var (dashboard, manageProductCatalog) = await (authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.AdminPanel.Dashboard),
             authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.AdminPanel.ManageProductCatalog));
 
@@ -33,6 +32,15 @@ public partial class MainLayout
             };
 
             navPanelItems.Add(adminPanelItem);
+
+            BitNavItem abhayyoganaPanelItem = new()
+            {
+                Text = localizer[nameof(AppStrings.SRAAbhayYojana)],
+                IconName = BitIconName.Database,
+                ChildItems = []
+            };
+
+            navPanelItems.Add(abhayyoganaPanelItem);
 
             if (dashboard)
             {
@@ -60,6 +68,22 @@ public partial class MainLayout
                             IconName = BitIconName.Product,
                             Url = PageUrls.Products,
                         }
+                ]);
+
+                abhayyoganaPanelItem.ChildItems.AddRange(
+                [
+                    new()
+                        {
+                            Text = localizer[nameof(AppStrings.AbhayYojana)],
+                            IconName = BitIconName.XRay,
+                            Url = PageUrls.AbhayYojana,
+                        },
+                        new()
+                        {
+                            Text = localizer[nameof(AppStrings.Builder)],
+                            IconName = BitIconName.GenericScan,
+                            Url = PageUrls.BuilderPage,
+                        },
                 ]);
             }
         }

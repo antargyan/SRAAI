@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SRAAI.Server.Api.Data;
 using SRAAI.Server.Api.Services.AbhayYojana;
 using SRAAI.Shared.Dtos.AbhayYojana;
+using SRAAI.Shared.Dtos.Categories;
 using SRAAI.Shared.Dtos.Summary;
 using Syncfusion.XlsIO;
 using Syncfusion.XlsIO.Implementation.Security;
@@ -312,6 +313,17 @@ public partial class AbhayYojanaController : AppControllerBase
             TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
         });
     }
+
+ 
+
+  /*  [HttpGet]
+    public async Task<List<AbhayYojanaApplicationDto>> GetAbhayYojanaApplication(CancellationToken cancellationToken)
+    {
+        var data = await DbContext.AbhayYojanaApplications.ToListAsync(cancellationToken);
+
+        return
+    }*/
+
 
     [HttpGet("{originalSlumNumber}")]
     public async Task<IActionResult> GetBySlumNumber(int originalSlumNumber, CancellationToken cancellationToken = default)

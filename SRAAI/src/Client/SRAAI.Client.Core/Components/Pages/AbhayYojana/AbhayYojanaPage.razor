@@ -35,27 +35,75 @@
                 </LabelTemplate>
             </BitFileUpload>
 
-            <BitFileUpload @ref="fileUploadRef2"
-                           AutoReset
-                           AutoUpload
-                           HideFileView
-                           Accept=".xlsx"
-                           MaxSize="1024 * 1024 * 50"
-                           UploadUrlProvider="GetBuilderUploadUrl"
-                           UploadRequestHttpHeadersProvider="GetBuilderUploadRequestHeaders"
-                           OnUploading="() => isBusy = true"
-                           OnUploadFailed="HandleUploadFailed"
-                           OnUploadComplete="HandleBuilderUploadComplete">
-                <LabelTemplate>
-                    <BitButton IconName="@BitIconName.Upload"
-                               Disabled="isBusy"
-                               OnClick="() => fileUploadRef2.Browse()">Select Builder Excel file</BitButton>
-                </LabelTemplate>
-            </BitFileUpload>
-
             <BitButton IconName="@BitIconName.View"
                        OnClick="GoToSummary">View Result</BitButton>
            
         </BitStack>
+        <div style="padding:16px; border:2px solid #333; border-radius:8px; background:#fafafa; font-family:Arial, sans-serif;">
+            <!-- Header -->
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #ccc; padding-bottom:8px; margin-bottom:12px;">
+                <h3 style="margin:0; font-size:18px; color:#333;">Applications</h3>
+                
+            </div>
+
+            @if (isLoadingApplications)
+            {
+                <div>Loading...</div>
+            }
+            else if (applications is not null && applications.Any())
+            {
+                <!-- Data Table -->
+                <table style="width:100%; border-collapse:collapse; background:#fff; border:1px solid #333;">
+                    <thead style="background:#f1f1f1;">
+                        <tr>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Serial No</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Slum Number</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Original Dweller</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Applicant Name</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Voter Year</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Voter Part</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Voter Serial</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Voter Bound</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Slum Usage</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Carpet Area (Sq Ft)</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Evidence Details</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Eligibility Status</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Remarks</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Version</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Created Date</th>
+                            <th style="border:1px solid #ccc; padding:8px; text-align:center;">Updated Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var a in applications)
+                        {
+                            <tr style="border:1px solid #ddd; text-align:center; background:@(applications.IndexOf(a) % 2 == 0 ? "#fff" : "#f9f9f9");">
+                                <td style="padding:8px; border:1px solid #ddd;">@a.SerialNumber</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.OriginalSlumNumber</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.OriginalSlumDwellerName</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.ApplicantName</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.VoterListYear</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.VoterListPartNumber</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.VoterListSerialNumber</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.VoterListBound</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.SlumUsage</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.CarpetAreaSqFt</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.EvidenceDetails</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.EligibilityStatus</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.Remarks</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.Version</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.CreatedDate</td>
+                                <td style="padding:8px; border:1px solid #ddd;">@a.UpdatedDate</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div>No applications found. Import an Excel file to get started.</div>
+            }
+        </div>
+
         </BitStack>
 </section>
