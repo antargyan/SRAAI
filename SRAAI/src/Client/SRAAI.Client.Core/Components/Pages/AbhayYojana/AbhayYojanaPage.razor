@@ -36,7 +36,7 @@
                            OnUploadFailed="HandleUploadFailed"
                            OnUploadComplete="HandleUploadComplete">
                 <LabelTemplate>
-                    <BitButton IconName="@BitIconName.Upload"
+                    <BitButton IconName="@BitIconName.ExcelDocument"
                                Style="background:#0078d4; color:white; border-radius:6px; padding:8px 14px;"
                                Disabled="isBusy"
                                OnClick="() => fileUploadRef.Browse()">Import Excel</BitButton>
@@ -56,8 +56,8 @@
             <h3 style="margin:0; font-size:18px; font-weight:600; color:#000;">
                 Total Applications : @applications?.Count()
             </h3>
-            <p style="margin:0; font-size:14px; color:#555;">
-                Last Updated : @DateTime.Now.ToString("dd-MM-yyyy HH:mm")
+            <p style="margin:0; font-size:18px; font-weight:600; color:#000;">
+                Last Updated : @applications?.Max(a => a.UpdatedDate)
             </p>
         </div>
 
