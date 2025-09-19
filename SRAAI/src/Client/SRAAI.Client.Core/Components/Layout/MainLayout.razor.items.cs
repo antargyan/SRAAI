@@ -77,13 +77,7 @@ public partial class MainLayout
                             Text = localizer[nameof(AppStrings.AbhayYojana)],
                             IconName = BitIconName.XRay,
                             Url = PageUrls.AbhayYojana,
-                        },
-                        new()
-                        {
-                            Text = localizer[nameof(AppStrings.Builder)],
-                            IconName = BitIconName.GenericScan,
-                            Url = PageUrls.BuilderPage,
-                        },
+                        }
                 ]);
             }
         }
