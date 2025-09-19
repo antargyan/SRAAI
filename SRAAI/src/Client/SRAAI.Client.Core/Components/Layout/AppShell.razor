@@ -11,7 +11,9 @@
                              Class="nav-panel"
                              Items="NavPanelItems"
                              Accent="BitColor.SecondaryBackground"
-                             IconUrl="_content/SRAAI.Client.Core/images/bit-logo.svg">
+                             IconUrl="_content/SRAAI.Client.Core/images/bit-logo.svg"
+                             NavStyles="@(new() { ItemIcon = "font-size: 18px;", ItemText = "font-size: 16px;" })" Styles="@(new() { HeaderIcon = "min-width:100px;" })">
+                    
                     <Footer>
                         <BitStack Class="footer-stack">
                             <AuthorizeView>
