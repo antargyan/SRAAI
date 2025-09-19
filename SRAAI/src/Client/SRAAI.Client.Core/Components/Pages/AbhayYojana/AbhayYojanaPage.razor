@@ -39,13 +39,32 @@
                     <BitButton IconName="@BitIconName.ExcelDocument"
                                Style="background:#0078d4; color:white; border-radius:6px; padding:8px 14px;"
                                Disabled="isBusy"
-                               OnClick="() => fileUploadRef.Browse()">Import Excel</BitButton>
+                               OnClick="() => fileUploadRef.Browse()">Import Original Annexure2</BitButton>
                 </LabelTemplate>
             </BitFileUpload>
 
             <BitButton IconName="@BitIconName.ExcelLogo"
                        Style="background:#f39c12; color:white; border-radius:6px; padding:8px 14px;"
-                       OnClick="ExportToExcel">Export to Excel</BitButton>
+                       OnClick="ExportToExcel">Export latest  Annexure</BitButton>
+
+            <BitFileUpload @ref="fileUpdateRef"
+                           AutoReset
+                           AutoUpload
+                           HideFileView
+                           Accept=".xlsx"
+                           MaxSize="1024 * 1024 * 50"
+                           UploadUrlProvider="GetUpdateUploadUrl"
+                           UploadRequestHttpHeadersProvider="GetUpdateUploadRequestHeaders"
+                           OnUploading="() => isBusy = true"
+                           OnUploadFailed="HandleUploadFailed"
+                           OnUploadComplete="HandleUploadUpdateComplete">
+                <LabelTemplate>
+                    <BitButton IconName="@BitIconName.ExcelDocument"
+                               Style="background:#0078d4; color:white; border-radius:6px; padding:8px 14px;"
+                               Disabled="isBusy"
+                               OnClick="() => fileUpdateRef.Browse()">Import Addendum</BitButton>
+                </LabelTemplate>
+            </BitFileUpload>
 
             <BitButton IconName="@BitIconName.View"
                        Style="background:#28a745; color:white; border-radius:6px; padding:8px 14px;"

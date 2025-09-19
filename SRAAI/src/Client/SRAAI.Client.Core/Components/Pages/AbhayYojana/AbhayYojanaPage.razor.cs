@@ -8,6 +8,7 @@ namespace SRAAI.Client.Core.Components.Pages.AbhayYojana;
 public partial class AbhayYojanaPage : AppPageBase
 {
     private BitFileUpload fileUploadRef = default!;
+    private BitFileUpload fileUpdateRef = default!;
 
     private bool isBusy = false;
     private bool isLoadingApplications = false;
@@ -264,6 +265,17 @@ public partial class AbhayYojanaPage : AppPageBase
         var token = await AuthManager.GetFreshAccessToken(requestedBy: nameof(BitFileUpload));
         return new() { { "Authorization", $"Bearer {token}" } };
     }
+
+    private async Task<string> GetUpdateUploadUrl()
+    {
+        return new Uri(AbsoluteServerAddress, "/api/AbhayYojana/ImportUpdateExcel").ToString();
+    }
+
+    private async Task<Dictionary<string, string>> GetUpdateUploadRequestHeaders()
+    {
+        var token = await AuthManager.GetFreshAccessToken(requestedBy: nameof(BitFileUpload));
+        return new() { { "Authorization", $"Bearer {token}" } };
+    }
     private Task HandleUploadFailed(BitFileInfo info)
     {
         isBusy = false;
@@ -290,8 +302,26 @@ public partial class AbhayYojanaPage : AppPageBase
             SnackBarService.Error($"Failed to process import result: {ex.Message}");
         }
     }
+    private async Task HandleUploadUpdateComplete(BitFileInfo info)
+    {
+        isBusy = false;
+        try
+        {
+            await LoadApplications();
+            await LoadStatistics();
 
-  
+            // For now, just show success message
+            // The import result will be displayed when the data is refreshed
+            SnackBarService.Success("Addendum Excel Update successfully. Please check the results below.");
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            SnackBarService.Error($"Failed to process import result: {ex.Message}");
+        }
+    }
+
 }
 
 public record AbhayYojanaImportResult(
