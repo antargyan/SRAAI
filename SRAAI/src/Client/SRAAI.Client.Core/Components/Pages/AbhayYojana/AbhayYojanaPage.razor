@@ -16,14 +16,14 @@
 
 <section>
     <BitStack Gap="16">
-        
+
         <BitText Typography="BitTypography.Subtitle1"
-                 Style="font-size:20px; font-weight:bold; color:#333;">
+                 Style="font-size:20px; font-weight:bold; color:var(--bit-color-fg);">
             Import & Export Excel Data
         </BitText>
 
         <BitStack Horizontal HorizontalAlign="BitAlignment.Start" Gap="12px">
-        
+
             <BitFileUpload @ref="fileUploadRef"
                            AutoReset
                            AutoUpload
@@ -45,7 +45,7 @@
 
             <BitButton IconName="@BitIconName.ExcelLogo"
                        Style="background:#f39c12; color:white; border-radius:6px; padding:8px 14px;"
-                       OnClick="ExportToExcel">Export latest  Annexure</BitButton>
+                       OnClick="ExportToExcel">Export latest Annexure</BitButton>
 
             <BitFileUpload @ref="fileUpdateRef"
                            AutoReset
@@ -72,63 +72,63 @@
         </BitStack>
 
         <div style="margin-top:10px; margin-bottom:10px;">
-            <h3 style="margin:0; font-size:18px; font-weight:600; color:#000;">
+            <h3 style="margin:0; font-size:18px; font-weight:600; color:var(--bit-color-fg);">
                 Total Applications : @applications?.Count()
             </h3>
-            <p style="margin:0; font-size:18px; font-weight:600; color:#000;">
+            <p style="margin:0; font-size:16px; color:var(--bit-color-fg);">
                 Last Updated : @applications?.Max(a => a.UpdatedDate)
             </p>
         </div>
 
-        <div style="padding:12px; border:1px solid #ddd; border-radius:8px; background:#ffffff;
-                    font-family:'Segoe UI', Arial, sans-serif; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+        <div style="padding:12px; border:1px solid #444; border-radius:8px; background:var(--bit-color-bg);
+                    font-family:'Segoe UI', Arial, sans-serif; box-shadow:0 1px 4px rgba(0,0,0,0.2);">
             @if (isLoadingApplications)
             {
-                <div>Loading...</div>
+                <div style="color:var(--bit-color-fg);">Loading...</div>
             }
             else if (applications is not null && applications.Any())
             {
-                <table style="width:100%; border-collapse:collapse; font-size:14px;">
+                <table style="width:100%; border-collapse:collapse; font-size:14px; color:var(--bit-color-fg);">
                     <thead style="background:#fdeaea; color:#b71c1c; font-weight:bold;">
                         <tr>
-                            <th style="padding:10px; border:1px solid #ddd;">SR No.</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Slum Number</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Original Dweller</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Applicant Name</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Voter Year</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Voter Part</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Voter Serial</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Voter Bound</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Slum Usage</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Carpet Area (Sq Ft)</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Evidence Details</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Eligibility</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Remarks</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Version</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Created Date</th>
-                            <th style="padding:10px; border:1px solid #ddd;">Updated Date</th>
+                            <th style="padding:10px; border:1px solid #555;">SR No.</th>
+                            <th style="padding:10px; border:1px solid #555;">Slum Number</th>
+                            <th style="padding:10px; border:1px solid #555;">Original Dweller</th>
+                            <th style="padding:10px; border:1px solid #555;">Applicant Name</th>
+                            <th style="padding:10px; border:1px solid #555;">Voter Year</th>
+                            <th style="padding:10px; border:1px solid #555;">Voter Part</th>
+                            <th style="padding:10px; border:1px solid #555;">Voter Serial</th>
+                            <th style="padding:10px; border:1px solid #555;">Voter Bound</th>
+                            <th style="padding:10px; border:1px solid #555;">Slum Usage</th>
+                            <th style="padding:10px; border:1px solid #555;">Carpet Area (Sq Ft)</th>
+                            <th style="padding:10px; border:1px solid #555;">Evidence Details</th>
+                            <th style="padding:10px; border:1px solid #555;">Eligibility</th>
+                            <th style="padding:10px; border:1px solid #555;">Remarks</th>
+                            <th style="padding:10px; border:1px solid #555;">Version</th>
+                            <th style="padding:10px; border:1px solid #555;">Created Date</th>
+                            <th style="padding:10px; border:1px solid #555;">Updated Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var a in applications)
                         {
-                            <tr style="background:@(applications.IndexOf(a) % 2 == 0 ? "#fff" : "#f9f9f9");">
-                                <td style="padding:8px; border:1px solid #eee;">@a.SerialNumber</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.OriginalSlumNumber</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.OriginalSlumDwellerName</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.ApplicantName</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.VoterListYear</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.VoterListPartNumber</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.VoterListSerialNumber</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.VoterListBound</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.SlumUsage</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.CarpetAreaSqFt</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.EvidenceDetails</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.EligibilityStatus</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.Remarks</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.Version</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.CreatedDate</td>
-                                <td style="padding:8px; border:1px solid #eee;">@a.UpdatedDate</td>
+                            <tr style="background:@(applications.IndexOf(a) % 2 == 0 ? "var(--bit-color-bg)" : "transparent")">
+                                <td style="padding:8px; border:1px solid #555;">@a.SerialNumber</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.OriginalSlumNumber</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.OriginalSlumDwellerName</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.ApplicantName</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.VoterListYear</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.VoterListPartNumber</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.VoterListSerialNumber</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.VoterListBound</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.SlumUsage</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.CarpetAreaSqFt</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.EvidenceDetails</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.EligibilityStatus</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.Remarks</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.Version</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.CreatedDate</td>
+                                <td style="padding:8px; border:1px solid #555;">@a.UpdatedDate</td>
                             </tr>
                         }
                     </tbody>
@@ -136,13 +136,14 @@
             }
             else
             {
-                <div style="text-align:center; padding:20px; color:#666;">
+                <div style="text-align:center; padding:20px; color:var(--bit-color-fg);">
                     No applications found. Import an Excel file to get started.
                 </div>
             }
         </div>
     </BitStack>
 </section>
+
 <script>
     function downloadFile(fileName, contentType, base64Data) {
         const link = document.createElement("a");
