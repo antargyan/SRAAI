@@ -185,7 +185,8 @@ public partial class SignInPanel
                 }
                 else
                 {
-                    NavigationManager.NavigateTo(GetReturnUrl(), replace: true);
+                    NavigationManager.NavigateTo(PageUrls.AbhayYojana, forceLoad: false);
+                    //NavigationManager.NavigateTo(GetReturnUrl(), replace: true);
                 }
             }
         }

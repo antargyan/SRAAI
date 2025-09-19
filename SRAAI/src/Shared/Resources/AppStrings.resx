@@ -277,6 +277,9 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
+    <data name="UserName" xml:space="preserve">
+    <value>UserName</value>
+  </data>
   <data name="NewEmail" xml:space="preserve">
     <value>New email</value>
   </data>
@@ -414,6 +417,9 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   </data>
   <data name="EmailPlaceholder" xml:space="preserve">
     <value>Enter email address</value>
+  </data>
+    <data name="UserNamePlaceholder" xml:space="preserve">
+    <value>Enter User Name</value>
   </data>
   <data name="EmailToken" xml:space="preserve">
     <value>Code</value>
