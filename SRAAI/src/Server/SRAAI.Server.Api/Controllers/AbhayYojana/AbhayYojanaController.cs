@@ -172,7 +172,7 @@ public partial class AbhayYojanaController : AppControllerBase
                         lastCol,
                         ExcelExportDataTableOptions.ColumnNames | ExcelExportDataTableOptions.ComputedFormulaValues);
                          var alldata = await DbContext.AbhayYojanaApplications.ToListAsync();
-                             DbContext.RemoveRange(alldata);
+                             DbContext.AbhayYojanaApplications.RemoveRange(alldata);
                              await DbContext.SaveChangesAsync();
 
                     for (int i = 0; i < customersTable.Rows.Count; i += 3)
