@@ -15,7 +15,7 @@ type onThemeChangeType = (newThemeName: string, oldThemeName: string) => void;
 
 (function () {
     BitTheme?.init({
-        system: true,
+        system: false,
         persist: true,
         onChange: (newTheme: string, oldTheme: string) => {
             document.body.classList.add('theme-' + newTheme);
