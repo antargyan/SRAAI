@@ -14,161 +14,327 @@
 <AppPageData Title="Abhay Yojana Applications"
              PageTitle="Abhay Yojana Applications" />
 
-<section>
-    <BitStack Gap="20" Style="padding:20px; font-family:'Segoe UI', Arial, sans-serif;">
+<!-- Enhanced CSS Libraries -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
 
-        <BitText Typography="BitTypography.Subtitle1"
-                 Style="font-size:22px; font-weight:700; color:var(--bit-color-fg); margin-bottom:8px;">
-            Import & Export Excel Data
-        </BitText>
-
-        <!-- Action Buttons in a Card -->
-        <div style="background:white; padding:16px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-            <BitStack Horizontal HorizontalAlign="BitAlignment.Start" Gap="14px" Style="flex-wrap:wrap;">
-
-                <BitFileUpload @ref="fileUploadRef"
-                               AutoReset
-                               AutoUpload
-                               HideFileView
-                               Accept=".xlsx"
-                               MaxSize="1024 * 1024 * 50"
-                               UploadUrlProvider="GetUploadUrl"
-                               UploadRequestHttpHeadersProvider="GetUploadRequestHeaders"
-                               OnUploading="() => isBusy = true"
-                               OnUploadFailed="HandleUploadFailed"
-                               OnUploadComplete="HandleUploadComplete">
-                    <LabelTemplate>
-                        <BitButton IconName="@BitIconName.ExcelDocument"
-                                   Style="background:#0078d4; color:white; border-radius:8px; padding:10px 18px;
-                                          font-weight:600; box-shadow:0 2px 5px rgba(0,0,0,0.2); transition:0.3s;"
-                                   Class="btn-hover"
-                                   Disabled="isBusy"
-                                   OnClick="() => fileUploadRef.Browse()">
-                            Import Original Annexure2
-                        </BitButton>
-                    </LabelTemplate>
-                </BitFileUpload>
-
-                <BitButton IconName="@BitIconName.ExcelLogo"
-                           Style="background:#f39c12; color:white; border-radius:8px; padding:10px 18px;
-                                  font-weight:600; box-shadow:0 2px 5px rgba(0,0,0,0.2); transition:0.3s;"
-                           Class="btn-hover"
-                           OnClick="ExportToExcel">
-                    Export latest Annexure
-                </BitButton>
-
-                <BitFileUpload @ref="fileUpdateRef"
-                               AutoReset
-                               AutoUpload
-                               HideFileView
-                               Accept=".xlsx"
-                               MaxSize="1024 * 1024 * 50"
-                               UploadUrlProvider="GetUpdateUploadUrl"
-                               UploadRequestHttpHeadersProvider="GetUpdateUploadRequestHeaders"
-                               OnUploading="() => isBusy = true"
-                               OnUploadFailed="HandleUploadFailed"
-                               OnUploadComplete="HandleUploadUpdateComplete">
-                    <LabelTemplate>
-                        <BitButton IconName="@BitIconName.ExcelDocument"
-                                   Style="background:#16a085; color:white; border-radius:8px; padding:10px 18px;
-                                          font-weight:600; box-shadow:0 2px 5px rgba(0,0,0,0.2); transition:0.3s;"
-                                   Class="btn-hover"
-                                   Disabled="isBusy"
-                                   OnClick="() => fileUpdateRef.Browse()">
-                            Import Addendum
-                        </BitButton>
-                    </LabelTemplate>
-                </BitFileUpload>
-
-                <BitButton IconName="@BitIconName.View"
-                           Style="background:#28a745; color:white; border-radius:8px; padding:10px 18px;
-                                  font-weight:600; box-shadow:0 2px 5px rgba(0,0,0,0.2); transition:0.3s;"
-                           Class="btn-hover"
-                           OnClick="GoToSummary">
-                    View Result
-                </BitButton>
-            </BitStack>
-        </div>
-
-        <!-- Info Section -->
-        <div style="margin-top:20px; padding:12px 18px; border-left:4px solid #0078d4; background:#f8f9fa; border-radius:6px;">
-            <h3 style="margin:0; font-size:18px; font-weight:600; color:#0078d4;">
-                Total Applications : @applications?.Count()
-            </h3>
-            <p style="margin:0; font-size:15px; color:#555;">
-                Last Updated : @applications?.Max(a => a.UpdatedDate)
-            </p>
-        </div>
-
-        <div style="background:var(--bit-color-bg); font-family:'Segoe UI', Arial, sans-serif;">
-            @if (isLoadingApplications)
-            {
-                <div style="color:var(--bit-color-fg);">Loading...</div>
-            }
-            else if (applications is not null && applications.Any())
-            {
-                <table style="width:100%; border-collapse:collapse; font-size:14px; color:var(--bit-color-fg);">
-                    <thead style="background:#fdeaea; color:#b71c1c; font-weight:bold;">
-                        <tr>
-                            <th style="padding:10px; border:1px solid #555;">SR No.</th>
-                            <th style="padding:10px; border:1px solid #555;">Slum Number</th>
-                            <th style="padding:10px; border:1px solid #555;">Original Dweller</th>
-                            <th style="padding:10px; border:1px solid #555;">Applicant Name</th>
-                            <th style="padding:10px; border:1px solid #555;">Voter Year</th>
-                            <th style="padding:10px; border:1px solid #555;">Voter Part</th>
-                            <th style="padding:10px; border:1px solid #555;">Voter Serial</th>
-                            <th style="padding:10px; border:1px solid #555;">Voter Bound</th>
-                            <th style="padding:10px; border:1px solid #555;">Slum Usage</th>
-                            <th style="padding:10px; border:1px solid #555;">Carpet Area (Sq Ft)</th>
-                            <th style="padding:10px; border:1px solid #555;">Evidence Details</th>
-                            <th style="padding:10px; border:1px solid #555;">Eligibility</th>
-                            <th style="padding:10px; border:1px solid #555;">Remarks</th>
-                            <th style="padding:10px; border:1px solid #555;">Version</th>
-                            <th style="padding:10px; border:1px solid #555;">Created Date</th>
-                            <th style="padding:10px; border:1px solid #555;">Updated Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var a in applications)
-                        {
-                            <tr style="background:@(applications.IndexOf(a) % 2 == 0 ? "var(--bit-color-bg)" : "transparent")">
-                                <td style="padding:8px; border:1px solid #555;">@a.SerialNumber</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.OriginalSlumNumber</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.OriginalSlumDwellerName</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.ApplicantName</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.VoterListYear</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.VoterListPartNumber</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.VoterListSerialNumber</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.VoterListBound</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.SlumUsage</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.CarpetAreaSqFt</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.EvidenceDetails</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.EligibilityStatus</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.Remarks</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.Version</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.CreatedDate</td>
-                                <td style="padding:8px; border:1px solid #555;">@a.UpdatedDate</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <div style="text-align:center; padding:20px; color:var(--bit-color-fg);">
-                    No applications found. Import an Excel file to get started.
+<div class="main-container">
+    <!-- Hero Section with Gradient Background -->
+    <div class="hero-section">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="hero-content">
+                        <div class="hero-badge animate__animated animate__fadeInDown">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            Government Housing Scheme
+                        </div>
+                        <h1 class="hero-title animate__animated animate__fadeInUp animate__delay-1s">
+                            Abhay Yojana <span class="text-gradient">Applications</span>
+                        </h1>
+                        <p class="hero-description animate__animated animate__fadeInUp animate__delay-2s">
+                            Comprehensive management system for slum dweller applications with advanced Excel processing capabilities
+                        </p>
+                        <div class="hero-stats animate__animated animate__fadeInUp animate__delay-3s">
+                            <div class="stat-item">
+                                <div class="stat-number">@(applications?.Count() ?? 0)</div>
+                                <div class="stat-label">Total Applications</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">@(applications?.Count(a => a.EligibilityStatus?.Contains("पात्र") == true) ?? 0)</div>
+                                <div class="stat-label">Eligible</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">@(applications?.Count(a => a.EligibilityStatus?.Contains("अपात्र") == true) ?? 0)</div>
+                                <div class="stat-label">Ineligible</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            }
+                <div class="col-lg-4">
+                    <div class="hero-illustration animate__animated animate__fadeInRight animate__delay-2s">
+                        <div class="floating-card">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <div class="floating-card delay-1">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="floating-card delay-2">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </BitStack>
-</section>
+    </div>
 
-<style>
-    .btn-hover:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.25) !important;
-    }
-</style>
+    <!-- Action Tools Section -->
+    <div class="container-fluid py-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-header text-center mb-5">
+                    <h2 class="section-title">Data Management Tools</h2>
+                    <p class="section-subtitle">Powerful tools for importing, processing, and exporting application data</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Import Original Annexure -->
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card import-card">
+                    <div class="card-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <h5 class="card-title">Import Original</h5>
+                    <p class="card-description">Upload and process original Annexure-II Excel files</p>
+                    <BitFileUpload @ref="fileUploadRef"
+                                   AutoReset
+                                   AutoUpload
+                                   HideFileView
+                                   Accept=".xlsx"
+                                   MaxSize="1024 * 1024 * 50"
+                                   UploadUrlProvider="GetUploadUrl"
+                                   UploadRequestHttpHeadersProvider="GetUploadRequestHeaders"
+                                   OnUploading="() => isBusy = true"
+                                   OnUploadFailed="HandleUploadFailed"
+                                   OnUploadComplete="HandleUploadComplete">
+                        <LabelTemplate>
+                            <button type="button" 
+                                    class="btn-action btn-primary"
+                                    disabled="@isBusy"
+                                    @onclick="() => fileUploadRef.Browse()">
+                                <i class="fas fa-upload me-2"></i>
+                                Choose File
+                            </button>
+                        </LabelTemplate>
+                    </BitFileUpload>
+                </div>
+            </div>
+
+            <!-- Export Latest Annexure -->
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card export-card">
+                    <div class="card-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h5 class="card-title">Export Data</h5>
+                    <p class="card-description">Generate and download formatted Excel reports</p>
+                    <button type="button" 
+                            class="btn-action btn-warning w-100"
+                            @onclick="ExportToExcel">
+                        <i class="fas fa-download me-2"></i>
+                        Export Excel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Import Addendum -->
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card update-card">
+                    <div class="card-icon">
+                        <i class="fas fa-file-import"></i>
+                    </div>
+                    <h5 class="card-title">Import Addendum</h5>
+                    <p class="card-description">Update existing records with addendum files</p>
+                    <BitFileUpload @ref="fileUpdateRef"
+                                   AutoReset
+                                   AutoUpload
+                                   HideFileView
+                                   Accept=".xlsx"
+                                   MaxSize="1024 * 1024 * 50"
+                                   UploadUrlProvider="GetUpdateUploadUrl"
+                                   UploadRequestHttpHeadersProvider="GetUpdateUploadRequestHeaders"
+                                   OnUploading="() => isBusy = true"
+                                   OnUploadFailed="HandleUploadFailed"
+                                   OnUploadComplete="HandleUploadUpdateComplete">
+                        <LabelTemplate>
+                            <button type="button" 
+                                    class="btn-action btn-success"
+                                    disabled="@isBusy"
+                                    @onclick="() => fileUpdateRef.Browse()">
+                                <i class="fas fa-file-import me-2"></i>
+                                Choose File
+                            </button>
+                        </LabelTemplate>
+                    </BitFileUpload>
+                </div>
+            </div>
+
+            <!-- View Results -->
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card analytics-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h5 class="card-title">View Analytics</h5>
+                    <p class="card-description">Access detailed reports and statistics</p>
+                    <button type="button" 
+                            class="btn-action btn-info w-100"
+                            @onclick="GoToSummary">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        View Results
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table Section -->
+    <div class="container-fluid pb-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="data-section">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-table me-3"></i>
+                            Applications Data
+                        </h3>
+                        <div class="section-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search applications..." class="search-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-container">
+                        @if (isLoadingApplications)
+                        {
+                            <div class="loading-state">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                </div>
+                                <h4>Loading Applications</h4>
+                                <p>Please wait while we fetch your data...</p>
+                            </div>
+                        }
+                        else if (applications is not null && applications.Any())
+                        {
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>SR No.</th>
+                                            <th>Slum Number</th>
+                                            <th>Original Dweller</th>
+                                            <th>Applicant Name</th>
+                                            <th>Voter Details</th>
+                                            <th>Slum Usage</th>
+                                            <th>Area (Sq Ft)</th>
+                                            <th>Evidence</th>
+                                            <th>Eligibility</th>
+                                            <th>InsertDate</th>
+                                            <th>UpdateDate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var a in applications)
+                                        {
+                                            <tr class="data-row">
+                                                <td>
+                                                    <span class="badge badge-secondary">@a.SerialNumber</span>
+                                                </td>
+                                                <td>
+                                                    <div class="primary-info">@a.OriginalSlumNumber</div>
+                                                </td>
+                                                <td>
+                                                    <div class="name-info">@a.OriginalSlumDwellerName</div>
+                                                </td>
+                                                <td>
+                                                    <div class="name-info">@a.ApplicantName</div>
+                                                </td>
+                                                <td>
+                                                    <div class="voter-info">
+                                                        <div>Year: @a.VoterListYear</div>
+                                                        <div>Part: @a.VoterListPartNumber</div>
+                                                        <div>Serial: @a.VoterListSerialNumber</div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-info">@a.SlumUsage</span>
+                                                </td>
+                                                <td>
+                                                    <div class="area-info">@a.CarpetAreaSqFt</div>
+                                                </td>
+                                                <td>
+                                                    <div class="evidence-info" title="@a.EvidenceDetails">
+                                                        @(a.EvidenceDetails?.Length > 50 ? a.EvidenceDetails.Substring(0, 50) + "..." : a.EvidenceDetails)
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if (a.EligibilityStatus?.Contains("पात्र") == true)
+                                                    {
+                                                        <span class="badge badge-success">
+                                                            <i class="fas fa-check-circle me-1"></i>
+                                                            @a.EligibilityStatus
+                                                        </span>
+                                                    }
+                                                    else if (a.EligibilityStatus?.Contains("अपात्र") == true)
+                                                    {
+                                                        <span class="badge badge-danger">
+                                                            <i class="fas fa-times-circle me-1"></i>
+                                                            @a.EligibilityStatus
+                                                        </span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-warning">
+                                                            <i class="fas fa-clock me-1"></i>
+                                                            @a.EligibilityStatus
+                                                        </span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <div class="date-info">
+                                                        <div class="date-item">
+                                                            <i class="fas fa-plus-circle text-success me-1"></i>
+                                                            @a.CreatedDate.ToString("dd/MM/yyyy")
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if (a.UpdatedDate.HasValue)
+                                                    {
+                                                        <div class="date-item">
+                                                            <i class="fas fa-edit text-info me-1"></i>
+                                                            @a.UpdatedDate.Value.ToString("dd/MM/yyyy")
+                                                        </div>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-file-excel"></i>
+                                </div>
+                                <h4>No Applications Found</h4>
+                                <p>Import an Excel file to get started with data management</p>
+                                <button class="btn-action btn-primary" @onclick="() => fileUploadRef.Browse()">
+                                    <i class="fas fa-upload me-2"></i>
+                                    Import Your First File
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <script>
     function downloadFile(fileName, contentType, base64Data) {
@@ -177,4 +343,538 @@
         link.download = fileName;
         link.click();
     }
+
+    // Enhanced animations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.action-card, .data-section').forEach(el => {
+            observer.observe(el);
+        });
+    });
 </script>
+
+<style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        --light-bg: #f8f9fa;
+        --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        --border-radius: 16px;
+    }
+
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .main-container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: var(--primary-gradient);
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="0,0 1000,100 1000,0"/></svg>');
+        background-size: cover;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: rgba(255,255,255,0.2);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        backdrop-filter: blur(10px);
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+
+    .text-gradient {
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-description {
+        font-size: 1.2rem;
+        color: rgba(255,255,255,0.9);
+        margin-bottom: 40px;
+        line-height: 1.6;
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: rgba(255,255,255,0.8);
+        font-weight: 500;
+    }
+
+    .hero-illustration {
+        position: relative;
+        height: 300px;
+    }
+
+    .floating-card {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: white;
+        backdrop-filter: blur(10px);
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-card:nth-child(1) {
+        top: 20px;
+        right: 20px;
+    }
+
+    .floating-card:nth-child(2) {
+        top: 120px;
+        right: 100px;
+        animation-delay: -2s;
+    }
+
+    .floating-card:nth-child(3) {
+        bottom: 20px;
+        right: 50px;
+        animation-delay: -4s;
+    }
+
+    keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    /* Action Cards */
+    .action-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 30px;
+        text-align: center;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+        height: 100%;
+    }
+
+    .action-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .import-card .card-icon {
+        background: var(--primary-gradient);
+    }
+
+    .export-card .card-icon {
+        background: var(--warning-gradient);
+    }
+
+    .update-card .card-icon {
+        background: var(--success-gradient);
+    }
+
+    .analytics-card .card-icon {
+        background: var(--info-gradient);
+    }
+
+    .card-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2rem;
+        color: white;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .card-description {
+        color: #7f8c8d;
+        margin-bottom: 25px;
+        line-height: 1.5;
+    }
+
+    .btn-action {
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 140px;
+    }
+
+    .btn-primary {
+        background: var(--primary-gradient);
+        color: white;
+    }
+
+    .btn-warning {
+        background: var(--warning-gradient);
+        color: white;
+    }
+
+    .btn-success {
+        background: var(--success-gradient);
+        color: white;
+    }
+
+    .btn-info {
+        background: var(--info-gradient);
+        color: white;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        color: white;
+    }
+
+    /* Data Section */
+    .data-section {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+    }
+
+    .search-box {
+        position: relative;
+        width: 300px;
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 12px 15px 12px 45px;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    /* Data Table */
+    .data-container {
+        padding: 0;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .data-table thead th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px 15px;
+        font-weight: 600;
+        text-align: left;
+        border: none;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .data-table tbody tr {
+        border-bottom: 1px solid #f1f3f4;
+        transition: all 0.3s ease;
+    }
+
+    .data-table tbody tr:hover {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        transform: scale(1.01);
+    }
+
+    .data-table tbody td {
+        padding: 20px 15px;
+        vertical-align: middle;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+    }
+
+    .badge-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+
+    .badge-danger {
+        background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        color: white;
+    }
+
+    .badge-warning {
+        background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        color: white;
+    }
+
+    .badge-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+        color: white;
+    }
+
+    .badge-primary {
+        background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+        color: white;
+    }
+
+    .primary-info {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 16px;
+    }
+
+    .name-info {
+        font-weight: 500;
+        color: #495057;
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .voter-info {
+        font-size: 12px;
+        color: #6c757d;
+        line-height: 1.4;
+    }
+
+    .area-info {
+        font-weight: 600;
+        color: #28a745;
+    }
+
+    .evidence-info {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #495057;
+        font-size: 13px;
+    }
+
+    .date-info {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .date-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2px;
+    }
+
+    /* Loading State */
+    .loading-state {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .loading-spinner {
+        margin-bottom: 30px;
+    }
+
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #dee2e6;
+        margin-bottom: 30px;
+    }
+
+    .empty-state h4 {
+        color: #495057;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        color: #6c757d;
+        margin-bottom: 30px;
+    }
+
+    /* Responsive Design */
+    media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-stats {
+            gap: 20px;
+        }
+        
+        .section-header {
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .search-box {
+            width: 100%;
+        }
+        
+        .data-table {
+            font-size: 12px;
+        }
+        
+        .data-table thead th,
+        .data-table tbody td {
+            padding: 10px 8px;
+        }
+    }
+
+    /* Animation Classes */
+    .animate__animated {
+        animation-duration: 1s;
+        animation-fill-mode: both;
+    }
+
+    .animate__fadeInUp {
+        animation-name: fadeInUp;
+    }
+
+    keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translate3d(0, 40px, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
