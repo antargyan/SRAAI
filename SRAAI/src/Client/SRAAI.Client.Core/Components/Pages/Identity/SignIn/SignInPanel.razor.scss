@@ -1,4 +1,5 @@
 @import '../../../../Styles/abstracts/_media-queries.scss';
+@import '../../../../Styles/abstracts/_bit-css-variables.scss';
 
 .signin-container {
     width: 100%;
@@ -6,34 +7,54 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, $bit-color-background-primary 0%, $bit-color-background-secondary 100%);
-    padding: 2rem;
-    min-height: 100vh;
+   /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
+    position: relative;
+    overflow: hidden;
 
-    include lt-md {
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        /*background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+*/        z-index: 1;
+    }
+
+    @include lt-md {
         padding: 1rem;
         min-height: 100vh;
     }
 }
 
 .signin-card {
-    background: $bit-color-background-primary;
-    border-radius: 16px;
-    box-shadow: $bit-box-shadow-4;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
     padding: 3rem;
     width: 100%;
     max-width: 420px;
-    border: 1px solid $bit-color-border-secondary;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
 
-    include lt-md {
-        padding: 2rem;
-        max-width: 100%;
-        border-radius: 12px;
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 12px 24px rgba(0, 0, 0, 0.1);
     }
 
-    include lt-sm {
+    @include lt-md {
+        padding: 2rem;
+        max-width: 100%;
+        border-radius: 16px;
+    }
+
+    @include lt-sm {
         padding: 1.5rem;
-        border-radius: 8px;
+        border-radius: 12px;
     }
 }
 
@@ -43,22 +64,41 @@
 
     .logo-container {
         margin-bottom: 1.5rem;
-
-        :: deep .bit-icon {
-            font-size: 3rem;
-            color: $bit-color-primary;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+        
+        &:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
+        }
+        
+        ::deep .bit-icon {
+            font-size: 2.5rem;
+            color: white;
         }
     }
 
     .signin-title {
         margin-bottom: 0.5rem;
-        color: $bit-color-foreground-primary;
-        font-weight: 600;
+        color: #2d3748;
+        font-weight: 700;
+        font-size: 1.75rem;
+        letter-spacing: -0.025em;
     }
 
     .signin-subtitle {
-        color: $bit-color-foreground-secondary;
-        line-height: 1.5;
+        color: #718096;
+        line-height: 1.6;
+        font-size: 1rem;
+        font-weight: 400;
     }
 }
 
@@ -87,28 +127,48 @@
 }
 
 .form-input {
-    :: deep .bit-txt {
-        border-radius: 8px;
-        border: 2px solid $bit-color-border-secondary;
-        transition: all 0.2s ease;
+    ::deep .bit-txt {
+        border-radius: 12px;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
         font-size: 16px;
-        padding: 0.875rem 1rem;
+        padding: 1rem 1.25rem;
+        background-color: #f7fafc;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
         &:focus-within {
-            border-color: $bit-color-primary;
-            box-shadow: 0 0 0 3px rgba($bit-color-primary, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background-color: white;
+            transform: translateY(-1px);
         }
 
         &:hover {
-            border-color: $bit-color-border-primary;
+            border-color: #cbd5e0;
+            background-color: white;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #2d3748;
+            font-weight: 500;
+
+            &::placeholder {
+                color: #a0aec0;
+                font-weight: 400;
+            }
         }
     }
 
     ::deep .bit-txt-label {
-        font-weight: 500;
-        color: $bit-color-foreground-primary;
-        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 0.75rem;
         font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 }
 
@@ -119,15 +179,18 @@
     width: 100%;
 
     .forgot-password-link {
-        color: $bit-color-primary;
+        color: #667eea;
         text-decoration: none;
         font-size: 14px;
-        font-weight: 500;
-        transition: color 0.2s ease;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
 
         &:hover {
-            color: $bit-color-primary-hover;
-            text-decoration: underline;
+            color: #5a67d8;
+            background-color: rgba(102, 126, 234, 0.1);
+            text-decoration: none;
         }
     }
 }
@@ -142,21 +205,29 @@
         gap: 1rem;
 
         .remember-me-checkbox {
-            :: deep .bit-chb {
+            ::deep .bit-chb {
                 font-size: 14px;
-                color: $bit-color-foreground-secondary;
+                color: #4a5568;
+                font-weight: 500;
             }
         }
 
         .biometric-button {
-            :: deep .bit-btn {
+            ::deep .bit-btn {
                 border-radius: 50%;
                 width: 48px;
                 height: 48px;
-                transition: all 0.2s ease;
+                transition: all 0.3s ease;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border: none;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 
                 &:hover {
-                    background-color: $bit-color-background-secondary;
+                    transform: scale(1.1);
+                    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+                }
+
+                &:active {
                     transform: scale(1.05);
                 }
             }
@@ -167,46 +238,52 @@
 .submit-section {
     .password-message {
         margin-bottom: 1.5rem;
-        padding: 1rem;
-        background-color: $bit-color-background-secondary;
-        border-radius: 8px;
-        border-left: 4px solid $bit-color-primary;
+        padding: 1.25rem;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        border-radius: 12px;
+        border-left: 4px solid #667eea;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
 
-        :: deep .bit-txt {
-            color: $bit-color-foreground-secondary;
-            line-height: 1.5;
+        ::deep .bit-txt {
+            color: #4a5568;
+            line-height: 1.6;
+            font-weight: 500;
         }
     }
 
     .signin-button {
         width: 100%;
-        height: 48px;
-        border-radius: 8px;
-        font-weight: 600;
+        height: 52px;
+        border-radius: 12px;
+        font-weight: 700;
         font-size: 16px;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
 
-        :: deep .bit-btn {
-            background-color: $bit-color-primary;
+        ::deep .bit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
-            color: $bit-color-primary-text;
-            font-weight: 600;
-            text-transform: none;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 
             &:hover {
-                background-color: $bit-color-primary-hover;
-                transform: translateY(-1px);
-                box-shadow: $bit-box-shadow-2;
+                background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
             }
 
             &:active {
-                transform: translateY(0);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
             }
 
             &:disabled {
-                background-color: $bit-color-background-disabled;
-                color: $bit-color-foreground-disabled;
+                background: #e2e8f0;
+                color: #a0aec0;
                 transform: none;
                 box-shadow: none;
             }
@@ -222,36 +299,46 @@
 .signin-footer {
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: 1px solid $bit-color-border-secondary;
+    border-top: 1px solid #e2e8f0;
 
     .signup-message {
-        color: $bit-color-foreground-secondary;
-        line-height: 1.5;
+        color: #718096;
+        line-height: 1.6;
+        font-weight: 500;
 
         .signup-link {
-            color: $bit-color-primary;
+            color: #667eea;
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            display: inline-block;
+            margin-left: 0.25rem;
 
             &:hover {
-                color: $bit-color-primary-hover;
-                text-decoration: underline;
+                color: #5a67d8;
+                background-color: rgba(102, 126, 234, 0.1);
+                text-decoration: none;
             }
         }
     }
 }
 
 .validation-message {
-    color: $bit-color-danger;
-    font-size: 12px;
-    margin-top: 0.25rem;
+    color: #e53e3e;
+    font-size: 13px;
+    margin-top: 0.5rem;
     display: block;
-    font-weight: 500;
+    font-weight: 600;
+    padding: 0.5rem 0.75rem;
+    background-color: rgba(229, 62, 62, 0.1);
+    border-radius: 8px;
+    border-left: 3px solid #e53e3e;
 }
 
 // Responsive adjustments
-include lt-md {
+@include lt-md {
     .signin-card {
         box-shadow: $bit-box-shadow-2;
     }
@@ -284,7 +371,7 @@ include lt-md {
     }
 }
 
-include lt-sm {
+@include lt-sm {
     .signin-container {
         padding: 0.5rem;
     }
@@ -302,9 +389,9 @@ include lt-sm {
     }
 
     .form-input {
-        :: deep .bit-txt {
-            font-size: 16px;
-            // Prevent zoom on iOS padding: 0.75rem;
+        ::deep .bit-txt {
+            font-size: 16px; // Prevent zoom on iOS
+            padding: 0.75rem;
         }
     }
 
@@ -319,24 +406,94 @@ include lt-sm {
 // Dark theme adjustments
 :root[bit-theme="dark"] {
     .signin-container {
-        background: linear-gradient(135deg, $bit-color-background-primary 0%, $bit-color-background-secondary 100%);
+        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
     }
 
     .signin-card {
-        background: $bit-color-background-primary;
-        border-color: $bit-color-border-primary;
+        background: rgba(26, 32, 44, 0.95);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .signin-title {
+        color: #f7fafc;
+    }
+
+    .signin-subtitle {
+        color: #a0aec0;
+    }
+
+    .form-input {
+        ::deep .bit-txt {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: #f7fafc;
+
+            &:focus-within {
+                background-color: #1a202c;
+            }
+
+            &:hover {
+                background-color: #1a202c;
+            }
+
+            input {
+                color: #f7fafc;
+
+                &::placeholder {
+                    color: #718096;
+                }
+            }
+        }
+
+        ::deep .bit-txt-label {
+            color: #f7fafc;
+        }
+    }
+
+    .password-label {
+        .forgot-password-link {
+            color: #90cdf4;
+
+            &:hover {
+                color: #63b3ed;
+                background-color: rgba(144, 205, 244, 0.1);
+            }
+        }
+    }
+
+    .remember-me-checkbox {
+        ::deep .bit-chb {
+            color: #e2e8f0;
+        }
+    }
+
+    .signin-footer {
+        border-top-color: #4a5568;
+
+        .signup-message {
+            color: #a0aec0;
+
+            .signup-link {
+                color: #90cdf4;
+
+                &:hover {
+                    color: #63b3ed;
+                    background-color: rgba(144, 205, 244, 0.1);
+                }
+            }
+        }
     }
 }
 
 ::deep {
     .lg-sep {
-        include lt-md {
+        @include lt-md {
             display: none;
         }
     }
 
     .sm-sep {
-        include gt-sm {
+        @include gt-sm {
             display: none;
         }
     }
