@@ -55,10 +55,10 @@
                                             <LabelTemplate>
                                                 <div class="password-label">
                                                     <BitText>@Localizer[nameof(AppStrings.Password)]</BitText>
-                                                    <BitLink Href="@($"{PageUrls.ForgotPassword}?return-url={Uri.EscapeDataString(GetReturnUrl())}")" 
+                                                    @* <BitLink Href="@($"{PageUrls.ForgotPassword}?return-url={Uri.EscapeDataString(GetReturnUrl())}")" 
                                                              Class="forgot-password-link">
                                                         @Localizer[nameof(AppStrings.ForgotPasswordLink)]
-                                                    </BitLink>
+                                                    </BitLink> *@
                                                 </div>
                                             </LabelTemplate>
                                         </BitTextField>
@@ -135,7 +135,7 @@
             </div>
         </EditForm>
 
-        @if (internalSignInPanelType is SignInPanelType.Full)
+       @*  @if (internalSignInPanelType is SignInPanelType.Full)
         {
             <div class="signin-footer">
                 <BitText Align="BitTextAlign.Center" Typography="BitTypography.Body2" Class="signup-message">
@@ -146,6 +146,6 @@
                     </BitLink>
                 </BitText>
             </div>
-        }
+        } *@
     </div>
 </section>
