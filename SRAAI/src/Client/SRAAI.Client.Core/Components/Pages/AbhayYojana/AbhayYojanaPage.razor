@@ -192,6 +192,31 @@
                             <i class="fas fa-table me-3"></i>
                             Applications Data
                         </h3>
+                        @if (applications is not null && applications.Any())
+                        {
+                            <div class="last-update">
+                                <i class="fas fa-history me-2 text-primary"></i>
+                                <h6>Last Update:
+                                <strong>
+                                    @{
+                                        var lastUpdate = applications
+                                        .Where(a => a.UpdatedDate.HasValue)
+                                        .OrderByDescending(a => a.UpdatedDate.Value)
+                                        .Select(a => a.UpdatedDate.Value)
+                                        .FirstOrDefault();
+
+                                        if (lastUpdate != default)
+                                        {
+                                            @lastUpdate.ToString("dd/MM/yyyy hh:mm:ss tt")
+                                        }
+                                        else
+                                        {
+                                            <text>No updates yet</text>
+                                        }
+                                    }
+                                </strong></h6>
+                            </div>
+                        }
                         <div class="section-actions">
                             <div class="search-box">
                                 <i class="fas fa-search"></i>
@@ -877,4 +902,14 @@
             transform: translate3d(0, 0, 0);
         }
     }
+
+    .last-update {
+        font-size: 14px;
+        color: #495057;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
 </style>
