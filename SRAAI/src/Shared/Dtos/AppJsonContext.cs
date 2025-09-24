@@ -50,6 +50,10 @@ namespace SRAAI.Shared.Dtos;
 [JsonSerializable(typeof(AbhayYojanaPagedResult))]
 [JsonSerializable(typeof(List<AbhayYojanaPagedResult>))]
 [JsonSerializable(typeof(PagedResult<AbhayYojanaPagedResult>))]
+
+[JsonSerializable((typeof(UserDto)))]
+[JsonSerializable((typeof(PagedResult<UserDto>)))]
+[JsonSerializable((typeof(List<UserDto>)))]
 public partial class AppJsonContext : JsonSerializerContext
 {
 }

@@ -1,0 +1,145 @@
+@attribute [Route(PageUrls.AddOrEditUserPage + "/{FullName?}")]
+@attribute [Route("{culture?}" + PageUrls.AddOrEditUserPage + "/{FullName?}")]
+@attribute [Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)]
+@inherits AppPageBase
+
+<PageTitle>
+    @if (user.Id == default)
+    {
+        @Localizer[nameof(AppStrings.AddUser)]
+    }
+    else
+    {
+        @Localizer[nameof(AppStrings.EditUser)]
+    }
+</PageTitle>
+
+<section>
+    <BitStack>
+        <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.5rem">
+            <BitButton Variant="BitVariant.Text"
+                       Href="@PageUrls.UsersPage"
+                       IconName="@BitIconName.Back"
+                       Title="@Localizer[nameof(AppStrings.Back)]" />
+            <BitText Typography="BitTypography.H5">
+                @if (user.Id == default)
+                {
+                    @Localizer[nameof(AppStrings.AddUser)]
+                }
+                else
+                {
+                    @Localizer[nameof(AppStrings.EditUser)]
+                }
+            </BitText>
+        </BitStack>
+        <BitCard FullSize>
+            <EditForm Model="user" OnValidSubmit="WrapHandled(Save)" novalidate>
+                <AppDataAnnotationsValidator />
+
+                <BitStack Gap="0.25rem">
+                    @if (isLoading)
+                    {
+                        <BitEllipsisLoading />
+                    }
+
+                        <BitTextField @bind-Value="user.UserName"
+                                      Label="@Localizer[nameof(AppStrings.DisplayName)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterDisplayName)]" />
+                        <ValidationMessage For="() => user.DisplayName" />
+                        <br />
+                        <BitTextField @bind-Value="user.FullName"
+                                      Label="@Localizer[nameof(AppStrings.DisplayUserName)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterDisplayUserName)]" />
+                        <ValidationMessage For="() => user.DisplayUserName" />
+                        <br />
+                        <BitNumberField @bind-Value="user.Gender"
+                                      Label="@Localizer[nameof(AppStrings.Gender)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterGender)]" />
+                        <ValidationMessage For="() => user.Gender" />
+                        <br />
+                        @* <BitTextField @bind-Value="user.BirthDate"
+                                      Label="@Localizer[nameof(AppStrings.BirthDate)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterBirthDate)]" />
+                        <ValidationMessage For="() => user.BirthDate" />
+                        <br />
+                        <BitTextField @bind-Value="user.EmailTokenRequestedOn"
+                                      Label="@Localizer[nameof(AppStrings.EmailTokenRequestedOn)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterEmailTokenRequestedOn)]" />
+                        <ValidationMessage For="() => user.EmailTokenRequestedOn" />
+                        <br />
+                        <BitTextField @bind-Value="user.PhoneNumberTokenRequestedOn"
+                                      Label="@Localizer[nameof(AppStrings.PhoneNumberTokenRequestedOn)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterPhoneNumberTokenRequestedOn)]" />
+                        <ValidationMessage For="() => user.PhoneNumberTokenRequestedOn" />
+                        <br />
+                        <BitTextField @bind-Value="user.ResetPasswordTokenRequestedOn"
+                                      Label="@Localizer[nameof(AppStrings.ResetPasswordTokenRequestedOn)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterResetPasswordTokenRequestedOn)]" />
+                        <ValidationMessage For="() => user.ResetPasswordTokenRequestedOn" />
+                        <br />
+                        <BitTextField @bind-Value="user.TwoFactorTokenRequestedOn"
+                                      Label="@Localizer[nameof(AppStrings.TwoFactorTokenRequestedOn)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterTwoFactorTokenRequestedOn)]" />
+                        <ValidationMessage For="() => user.TwoFactorTokenRequestedOn" />
+                        <br />
+                        <BitTextField @bind-Value="user.OtpRequestedOn"
+                                      Label="@Localizer[nameof(AppStrings.OtpRequestedOn)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterOtpRequestedOn)]" />
+                        <ValidationMessage For="() => user.OtpRequestedOn" />
+                        <br />
+                        <BitTextField @bind-Value="user.ElevatedAccessTokenRequestedOn"
+                                      Label="@Localizer[nameof(AppStrings.ElevatedAccessTokenRequestedOn)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterElevatedAccessTokenRequestedOn)]" />
+                        <ValidationMessage For="() => user.ElevatedAccessTokenRequestedOn" />
+                        <br />
+                        <BitTextField @bind-Value="user.Sessions"
+                                      Label="@Localizer[nameof(AppStrings.Sessions)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterSessions)]" />
+                        <ValidationMessage For="() => user.Sessions" />
+                        <br />
+                        <BitTextField @bind-Value="user.WebAuthnCredentials"
+                                      Label="@Localizer[nameof(AppStrings.WebAuthnCredentials)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterWebAuthnCredentials)]" />
+                        <ValidationMessage For="() => user.WebAuthnCredentials" />
+                        <br /> *@
+                       @*  <BitTextField @bind-Value="user.Roles"
+                                      Label="@Localizer[nameof(AppStrings.Roles)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterRoles)]" />
+                        <ValidationMessage For="() => user.Roles" />
+                        <br />
+                        <BitTextField @bind-Value="user.Claims"
+                                      Label="@Localizer[nameof(AppStrings.Claims)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterClaims)]" />
+                        <ValidationMessage For="() => user.Claims" />
+                        <br />
+                        <BitTextField @bind-Value="user.Logins"
+                                      Label="@Localizer[nameof(AppStrings.Logins)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterLogins)]" />
+                        <ValidationMessage For="() => user.Logins" />
+                        <br />
+                        <BitTextField @bind-Value="user.Tokens"
+                                      Label="@Localizer[nameof(AppStrings.Tokens)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterTokens)]" />
+                        <ValidationMessage For="() => user.Tokens" />
+                        <br />
+                        <BitTextField @bind-Value="user.HasProfilePicture"
+                                      Label="@Localizer[nameof(AppStrings.HasProfilePicture)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterHasProfilePicture)]" />
+                        <ValidationMessage For="() => user.HasProfilePicture" />
+                        <br /> *@
+
+                    <BitStack Horizontal>
+                        <BitButton ButtonType="BitButtonType.Button"
+                                   Href="@PageUrls.UsersPage"
+                                   Variant="BitVariant.Outline">
+                            @Localizer[nameof(AppStrings.Cancel)]
+                        </BitButton>
+                        <BitButton IsLoading="isSaving" ButtonType="BitButtonType.Submit">
+                            @Localizer[nameof(AppStrings.Save)]
+                        </BitButton>
+                    </BitStack>
+                </BitStack>
+            </EditForm>
+        </BitCard>
+    </BitStack>
+</section>

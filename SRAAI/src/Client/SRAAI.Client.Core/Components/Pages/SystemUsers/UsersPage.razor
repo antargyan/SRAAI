@@ -1,0 +1,89 @@
+@attribute [Route(PageUrls.UsersPage)]
+@attribute [Route("{culture?}" + PageUrls.UsersPage)]
+@attribute [Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)]
+@inherits AppPageBase
+@using SRAAI.Shared.Dtos.Identity
+<PageTitle>@Localizer[nameof(AppStrings.UsersPageTitle)]</PageTitle>
+
+<section>
+    <BitStack>
+        <BitButton IconName="@BitIconName.Add" ReversedIcon
+                   OnClick="WrapHandled(CreateUser)">
+            @Localizer[nameof(AppStrings.AddUser)]
+        </BitButton>
+        <BitStack Gap="0" FillContent>
+            <div class="grid-container">
+                <BitDataGrid @ref="dataGrid"
+                             Class="users-grid"
+                             TGridItem="UserDto"
+                             Pagination="pagination"
+                             ItemsProvider="usersProvider">
+                    <BitDataGridPropertyColumn Title="@Localizer[nameof(AppStrings.FullName)]"
+                                               Align="BitDataGridAlign.Left"
+                                               Property="c => c!.FullName"
+                                               Class="name-col"
+                                               Sortable="true">
+                        <ColumnOptions>
+                            <BitStack Horizontal>
+                                <BitSearchBox @bind-Value="UserFullNameFilter"
+                                              AutoFocus DisableAnimation
+                                              Immediate DebounceTime="500"
+                                              Placeholder="@Localizer[(nameof(AppStrings.SearchOnFullName))]" />
+                                @if (isLoading)
+                                {
+                                    <BitEllipsisLoading CustomSize="32" />
+                                }
+                            </BitStack>
+                        </ColumnOptions>
+                    </BitDataGridPropertyColumn>
+
+                    
+                    
+                    <BitDataGridPropertyColumn Title="@Localizer[nameof(AppStrings.Gender)]"
+                                    Property="p => p!.Gender"
+                                    Align="BitDataGridAlign.Left"
+                                    Class="gender-col"
+                                    Sortable="true" />
+                    
+                    <BitDataGridPropertyColumn Title="@Localizer[nameof(AppStrings.BirthDate)]"
+                                    Property="p => p!.BirthDate"
+                                    Align="BitDataGridAlign.Left"
+                                    Class="birthdate-col"
+                                    Sortable="true" />
+                   
+                    <BitDataGridTemplateColumn Title="@Localizer[nameof(AppStrings.Action)]"
+                                               Align="BitDataGridAlign.Center"
+                                               Class="actions-col"
+                                               Context="user">
+                        <BitButton Variant="BitVariant.Text"
+                                   IconName="@BitIconName.Edit"
+                                   Title="@Localizer[(nameof(AppStrings.Edit))]"
+                                   OnClick="WrapHandled(() => EditUser(user!))" />
+                        <BitButton Color="BitColor.Error"
+                                   Variant="BitVariant.Text"
+                                   IconName="@BitIconName.Delete"
+                                   Title="@Localizer[(nameof(AppStrings.Delete))]"
+                                   OnClick="WrapHandled(() => { isDeleteDialogOpen = true; deletingUser = user; })" />
+                    </BitDataGridTemplateColumn>
+                </BitDataGrid>
+            </div>
+            <BitDataGridPaginator Value="pagination"
+                                  SummaryFormat="v => string.Format(Localizer[nameof(AppStrings.PaginatorSummary)], v.TotalItemCount)"
+                                  GoToFirstButtonTitle="Go to first page"
+                                  GoToPrevButtonTitle="Go to previous page"
+                                  GoToNextButtonTitle="Go to next page"
+                                  GoToLastButtonTitle="Go to last page">
+                <TextTemplate Context="value">
+                    <span>@Localizer[nameof(AppStrings.Page)] <b>@(value.CurrentPageIndex + 1)</b> @Localizer[nameof(AppStrings.Of)] <b>@(value.LastPageIndex + 1)</b></span>
+                </TextTemplate>
+            </BitDataGridPaginator>
+        </BitStack>
+    </BitStack>
+</section>
+
+<BitDialog OnOk="WrapHandled(DeleteUser)"
+           @bind-IsOpen="isDeleteDialogOpen"
+           OkText="@Localizer[nameof(AppStrings.Yes)]"
+           CancelText="@Localizer[nameof(AppStrings.No)]"
+           Title="@Localizer[nameof(AppStrings.DeleteUser)]"
+           Message="@Localizer.GetString(nameof(AppStrings.AreYouSureWannaDeleteUser), deletingUser?.FullName ?? "")" />
