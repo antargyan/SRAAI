@@ -17,7 +17,6 @@ public partial class UserDto : IValidatableObject
     [Display(Name = nameof(AppStrings.PhoneNumber))]
     public string? PhoneNumber { get; set; }
 
-    [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]
     [Display(Name = nameof(AppStrings.Password))]
     public string? Password { get; set; }
 
@@ -51,6 +50,13 @@ public partial class UserDto : IValidatableObject
             yield return new ValidationResult(
                 errorMessage: nameof(AppStrings.EitherProvideEmailOrPhoneNumber),
                 memberNames: [nameof(Email), nameof(PhoneNumber)]
+            );
+
+        // Password is required only for new users (when Id is default)
+        if (Id == default && string.IsNullOrEmpty(Password))
+            yield return new ValidationResult(
+                errorMessage: nameof(AppStrings.RequiredAttribute_ValidationError),
+                memberNames: [nameof(Password)]
             );
     }
 }

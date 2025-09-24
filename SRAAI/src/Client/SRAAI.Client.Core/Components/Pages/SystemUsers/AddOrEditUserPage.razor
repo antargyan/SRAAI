@@ -52,17 +52,40 @@
                                       Placeholder="@Localizer[nameof(AppStrings.EnterFullName)]" />
                         <ValidationMessage For="() => user.FullName" />
                         <br />
-                       @*   <BitNumberField @bind-Value="user.Gender"
-                                      Label="@Localizer[nameof(AppStrings.Gender)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterGender)]" />
-                        <ValidationMessage For="() => user.Gender" />
-                        <br />  *@
-                        @* <BitTextField @bind-Value="user.BirthDate"
-                                      Label="@Localizer[nameof(AppStrings.BirthDate)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterBirthDate)]" />
-                        <ValidationMessage For="() => user.BirthDate" />
+
+                    <BitDatePicker @bind-Value="user.BirthDate"
+                                   Label="@Localizer[nameof(AppStrings.BirthDate)]"
+                                   Placeholder="@Localizer[nameof(AppStrings.EnterBirthDate)]" />
+                    <ValidationMessage For="() => user.BirthDate" />
+                    <br />
+                    <BitTextField @bind-Value="user.Email"
+                                  Label="@Localizer[nameof(AppStrings.Email)]"
+                                  Placeholder="@Localizer[nameof(AppStrings.EnterEmail)]" />
+                    <ValidationMessage For="() => user.Email" />
+                    <br />
+                        <BitTextField @bind-Value="user.PhoneNumber"
+                                      Label="@Localizer[nameof(AppStrings.PhoneNumber)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterPhoneNumber)]" />
+                        <ValidationMessage For="() => user.PhoneNumber" />
                         <br />
-                        <BitTextField @bind-Value="user.EmailTokenRequestedOn"
+
+                        @if (user.Id == default) // Only show password field for new users
+                        {
+                            <BitTextField @bind-Value="user.Password"
+                                          Label="@Localizer[nameof(AppStrings.Password)]"
+                                          Placeholder="@Localizer[nameof(AppStrings.Password)]"/>
+                            <ValidationMessage For="() => user.Password" />
+                            <br />
+                        }
+
+                        <BitChoiceGroup @bind-Value="user.Gender"
+                                       Label="@Localizer[nameof(AppStrings.Gender)]"
+                                       Items="genderOptions" />
+                        <ValidationMessage For="() => user.Gender" />
+                        <br />
+                        
+                       
+                      @*   <BitTextField @bind-Value="user.EmailTokenRequestedOn"
                                       Label="@Localizer[nameof(AppStrings.EmailTokenRequestedOn)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterEmailTokenRequestedOn)]" />
                         <ValidationMessage For="() => user.EmailTokenRequestedOn" />
@@ -101,8 +124,8 @@
                                       Label="@Localizer[nameof(AppStrings.WebAuthnCredentials)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterWebAuthnCredentials)]" />
                         <ValidationMessage For="() => user.WebAuthnCredentials" />
-                        <br /> *@
-                       @*  <BitTextField @bind-Value="user.Roles"
+                        <br />  *@
+                        @*  <BitTextField @bind-Value="user.Roles"
                                       Label="@Localizer[nameof(AppStrings.Roles)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterRoles)]" />
                         <ValidationMessage For="() => user.Roles" />
@@ -121,7 +144,7 @@
                                       Label="@Localizer[nameof(AppStrings.Tokens)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterTokens)]" />
                         <ValidationMessage For="() => user.Tokens" />
-                        <br />*@
+                        <br /> *@
                         <BitCheckbox @bind-Value="user.HasProfilePicture"
                                       Label="@Localizer[nameof(AppStrings.HasProfilePicture)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterHasProfilePicture)]" />

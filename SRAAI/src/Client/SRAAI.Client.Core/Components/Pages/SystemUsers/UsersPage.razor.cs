@@ -86,7 +86,7 @@ public partial class UsersPage
 
     private async Task EditUser(UserDto user)
     {
-        NavigationManager.NavigateTo($"{PageUrls.AddOrEditUserPage}/{user.FullName}");
+        NavigationManager.NavigateTo($"{PageUrls.AddOrEditUserPage}/{user.Id}");
     }
 
     private async Task DeleteUser()

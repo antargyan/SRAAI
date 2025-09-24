@@ -1,5 +1,6 @@
 ﻿using SRAAI.Shared.Controllers.SystemUsers;
 using SRAAI.Shared.Dtos.Identity;
+using SRAAI.Shared.Enums;
 
 namespace SRAAI.Client.Core.Components.Pages.SystemUsers;
 
@@ -15,6 +16,13 @@ public partial class AddOrEditUserPage
     private bool isSaving;
     
     private UserDto user = new();
+
+    private readonly List<BitChoiceGroupItem<Gender?>> genderOptions = new()
+    {
+        new() { Text = "Male", Value = Gender.Male },
+        new() { Text = "Female", Value = Gender.Female },
+        new() { Text = "Other", Value = Gender.Other }
+    };
 
     protected override async Task OnInitAsync()
     {
@@ -45,7 +53,7 @@ public partial class AddOrEditUserPage
 
         try
         {
-            if (Id == default)
+            if (Id is null)
             {
                 await userController.Create(user, CurrentCancellationToken);
             }

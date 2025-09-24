@@ -1363,4 +1363,10 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="UserName" xml:space="preserve">
     <value>UserName</value>
   </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>EnterEmail</value>
+  </data>
+  <data name="EnterPhoneNumber" xml:space="preserve">
+    <value>EnterPhoneNumber</value>
+  </data>
 </root>

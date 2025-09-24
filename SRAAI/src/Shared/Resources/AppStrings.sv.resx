@@ -208,4 +208,10 @@
   <data name="Builder" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="EnterEmail" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="EnterPhoneNumber" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

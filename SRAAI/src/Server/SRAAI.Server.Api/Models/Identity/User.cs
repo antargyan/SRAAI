@@ -28,7 +28,6 @@ public partial class User : IdentityUser<Guid>
     public DateTimeOffset? TwoFactorTokenRequestedOn { get; set; }
 
     public DateTimeOffset? OtpRequestedOn { get; set; }
-
     /// <summary>
     /// <inheritdoc cref="AuthPolicies.ELEVATED_ACCESS" />
     /// </summary>

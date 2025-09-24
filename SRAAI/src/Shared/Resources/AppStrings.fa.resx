@@ -316,9 +316,6 @@
   <data name="BirthDate" xml:space="preserve">
     <value>تاریخ تولد</value>
   </data>
-  <data name="UserName" xml:space="preserve">
-    <value>نام کاربری</value>
-  </data>
   <data name="Name" xml:space="preserve">
     <value>نام</value>
   </data>
@@ -1087,9 +1084,6 @@
   <data name="NewRoleName" xml:space="preserve">
     <value>نام گروه کاربری جدید</value>
   </data>
-  <data name="Users" xml:space="preserve">
-    <value>کاربران</value>
-  </data>
   <data name="UsersWithCount" xml:space="preserve">
     <value>کاربران {0}</value>
   </data>
@@ -1245,6 +1239,18 @@
     <value />
   </data>
   <data name="Builder" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>کاربران</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>نام کاربری</value>
+  </data>
+  <data name="EnterEmail" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="EnterPhoneNumber" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
 </root>
