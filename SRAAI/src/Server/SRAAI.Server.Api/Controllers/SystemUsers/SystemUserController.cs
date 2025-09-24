@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SRAAI.Server.Api.Controllers.SystemUsers;  
   
-[ApiController, Route("api/[controller]/[action]"), Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)]  
+[ApiController, Route("api/[controller]/[action]")/*, Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)*/]  
 public partial class SystemUserController : AppControllerBase, ISystemUserController
 {  
    [AutoInject] private UserManager<User> userManager = default!;
@@ -108,12 +108,66 @@ public partial class SystemUserController : AppControllerBase, ISystemUserContro
 
    [HttpDelete("{id}")]  
    public async Task Delete(Guid id, CancellationToken cancellationToken)  
-   {  
-      DbContext.Users.Remove(new() { Id = id });  
-  
-      var affectedRows = await DbContext.SaveChangesAsync(cancellationToken);  
-  
-      if (affectedRows < 1)  
-        throw new ResourceNotFoundException(Localizer[nameof(AppStrings.UserCouldNotBeFound)]);  
-   }
+   {
+        /* DbContext.Users.Remove(new() { Id = id });  
+
+       var affectedRows = await DbContext.SaveChangesAsync(cancellationToken);  
+
+       if (affectedRows < 1)  
+         throw new ResourceNotFoundException(Localizer[nameof(AppStrings.UserCouldNotBeFound)]);  */
+
+
+        //var userId = User.GetUserId();
+
+        var user = await userManager.FindByIdAsync(id.ToString())
+                    ?? throw new ResourceNotFoundException();
+
+        var currentSessionId = User.GetSessionId();
+
+        foreach (var userSession in await GetUserSessions().ToArrayAsync(cancellationToken))
+        {
+            if (userSession.Id == currentSessionId)
+            {
+               // await SignOut(cancellationToken);
+            }
+            else
+            {
+                await RevokeSession(userSession.Id, cancellationToken);
+            }
+        }
+
+        var result = await userManager.DeleteAsync(user);
+
+        if (result.Succeeded is false)
+            throw new ResourceValidationException(result.Errors.Select(err => new LocalizedString(err.Code, err.Description)).ToArray());
+    }
+
+    [HttpGet, EnableQuery]
+    public IQueryable<UserSessionDto> GetUserSessions()
+    {
+        var userId = User.GetUserId();
+
+        return DbContext.UserSessions
+            .Where(us => us.UserId == userId)
+            .Project()
+            .OrderByDescending(us => us.RenewedOn);
+    }
+
+    [HttpPost("{id}"), Authorize(Policy = AuthPolicies.ELEVATED_ACCESS)]
+    public async Task RevokeSession(Guid id, CancellationToken cancellationToken)
+    {
+        var userId = User.GetUserId();
+
+        var currentSessionId = User.GetSessionId();
+
+        if (id == currentSessionId)
+            throw new BadRequestException(); // "Call SignOut instead"
+
+        var userSession = await DbContext.UserSessions
+            .FirstOrDefaultAsync(us => us.Id == id && us.UserId == userId, cancellationToken) ?? throw new ResourceNotFoundException();
+
+        DbContext.UserSessions.Remove(userSession);
+        await DbContext.SaveChangesAsync(cancellationToken);
+
+    }
 }
