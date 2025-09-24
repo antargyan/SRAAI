@@ -102,7 +102,7 @@ public partial class MainLayout
             authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.Management.ManageUsers),
             authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.Management.ManageAiPrompt));
 
-     /*   if (manageRoles || manageUsers || manageAiPrompt)
+       if (manageRoles || manageUsers || manageAiPrompt)
         {
             BitNavItem managementItem = new()
             {
@@ -113,7 +113,7 @@ public partial class MainLayout
 
             navPanelItems.Add(managementItem);
 
-            if (manageRoles)
+          /*  if (manageRoles)
             {
                 managementItem.ChildItems.Add(new()
                 {
@@ -131,9 +131,14 @@ public partial class MainLayout
                     IconName = BitIconName.SecurityGroup,
                     Url = PageUrls.Users,
                 });
-            }
-
-        }*/
+            }*/
+            managementItem.ChildItems.Add(new()
+            {
+                Text = localizer[nameof(AppStrings.Users)],
+                IconName = BitIconName.UserSync,
+                Url = PageUrls.UsersPage,
+            });
+        }
 
         if (authUser.IsAuthenticated())
         {

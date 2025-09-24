@@ -45,7 +45,7 @@ public partial class AddOrEditUserPage
 
         try
         {
-            if (user.FullName == default)
+            if (Id == default)
             {
                 await userController.Create(user, CurrentCancellationToken);
             }

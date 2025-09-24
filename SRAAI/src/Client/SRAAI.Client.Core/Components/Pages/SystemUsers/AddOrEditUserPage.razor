@@ -1,5 +1,5 @@
-@attribute [Route(PageUrls.AddOrEditUserPage + "/{FullName?}")]
-@attribute [Route("{culture?}" + PageUrls.AddOrEditUserPage + "/{FullName?}")]
+@attribute [Route(PageUrls.AddOrEditUserPage + "/{Id:guid?}")]
+@attribute [Route("{culture?}" + PageUrls.AddOrEditUserPage + "/{Id:guid?}")]
 @attribute [Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)]
 @inherits AppPageBase
 
@@ -43,20 +43,20 @@
                     }
 
                         <BitTextField @bind-Value="user.UserName"
-                                      Label="@Localizer[nameof(AppStrings.DisplayName)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterDisplayName)]" />
-                        <ValidationMessage For="() => user.DisplayName" />
+                                      Label="@Localizer[nameof(AppStrings.UserName)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterUserName)]" />
+                        <ValidationMessage For="() => user.UserName" />
                         <br />
                         <BitTextField @bind-Value="user.FullName"
-                                      Label="@Localizer[nameof(AppStrings.DisplayUserName)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterDisplayUserName)]" />
-                        <ValidationMessage For="() => user.DisplayUserName" />
+                                      Label="@Localizer[nameof(AppStrings.FullName)]"
+                                      Placeholder="@Localizer[nameof(AppStrings.EnterFullName)]" />
+                        <ValidationMessage For="() => user.FullName" />
                         <br />
-                        <BitNumberField @bind-Value="user.Gender"
+                       @*   <BitNumberField @bind-Value="user.Gender"
                                       Label="@Localizer[nameof(AppStrings.Gender)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterGender)]" />
                         <ValidationMessage For="() => user.Gender" />
-                        <br />
+                        <br />  *@
                         @* <BitTextField @bind-Value="user.BirthDate"
                                       Label="@Localizer[nameof(AppStrings.BirthDate)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterBirthDate)]" />
@@ -121,12 +121,12 @@
                                       Label="@Localizer[nameof(AppStrings.Tokens)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterTokens)]" />
                         <ValidationMessage For="() => user.Tokens" />
-                        <br />
-                        <BitTextField @bind-Value="user.HasProfilePicture"
+                        <br />*@
+                        <BitCheckbox @bind-Value="user.HasProfilePicture"
                                       Label="@Localizer[nameof(AppStrings.HasProfilePicture)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterHasProfilePicture)]" />
                         <ValidationMessage For="() => user.HasProfilePicture" />
-                        <br /> *@
+                        <br /> 
 
                     <BitStack Horizontal>
                         <BitButton ButtonType="BitButtonType.Button"
