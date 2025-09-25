@@ -48,10 +48,10 @@ public partial class SystemUserController : AppControllerBase, ISystemUserContro
       
       // Map basic properties
       userToAdd.FullName = dto.FullName;
-      userToAdd.Gender = dto.Gender;
-      userToAdd.BirthDate = dto.BirthDate;
-      userToAdd.HasProfilePicture = dto.HasProfilePicture;
-      userToAdd.UserName = dto.UserName;
+      userToAdd.Gender = Gender.Male;
+      userToAdd.BirthDate = DateTime.Now;
+      userToAdd.HasProfilePicture = false;
+      userToAdd.UserName = dto.Email;
       userToAdd.Email = dto.Email;
       userToAdd.PhoneNumber = dto.PhoneNumber;
         if (dto.PhoneNumber != null)

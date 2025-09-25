@@ -42,32 +42,33 @@
                         <BitEllipsisLoading />
                     }
 
-                        <BitTextField @bind-Value="user.UserName"
+                      @*   <BitTextField @bind-Value="user.UserName"
                                       Label="@Localizer[nameof(AppStrings.UserName)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterUserName)]" />
                         <ValidationMessage For="() => user.UserName" />
-                        <br />
+                        <br /> *@
+                    <BitTextField @bind-Value="user.Email"
+                                  Label="@Localizer[nameof(AppStrings.Email)]"
+                                  Placeholder="@Localizer[nameof(AppStrings.EnterEmail)]" />
+                    <ValidationMessage For="() => user.Email" />
+                    <br />
                         <BitTextField @bind-Value="user.FullName"
                                       Label="@Localizer[nameof(AppStrings.FullName)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterFullName)]" />
                         <ValidationMessage For="() => user.FullName" />
                         <br />
 
-                    <BitDatePicker @bind-Value="user.BirthDate"
+                @*     <BitDatePicker @bind-Value="user.BirthDate"
                                    Label="@Localizer[nameof(AppStrings.BirthDate)]"
                                    Placeholder="@Localizer[nameof(AppStrings.EnterBirthDate)]" />
                     <ValidationMessage For="() => user.BirthDate" />
-                    <br />
-                    <BitTextField @bind-Value="user.Email"
-                                  Label="@Localizer[nameof(AppStrings.Email)]"
-                                  Placeholder="@Localizer[nameof(AppStrings.EnterEmail)]" />
-                    <ValidationMessage For="() => user.Email" />
-                    <br />
-                        <BitTextField @bind-Value="user.PhoneNumber"
+                    <br /> *@
+                  
+                       @*  <BitTextField @bind-Value="user.PhoneNumber"
                                       Label="@Localizer[nameof(AppStrings.PhoneNumber)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterPhoneNumber)]" />
                         <ValidationMessage For="() => user.PhoneNumber" />
-                        <br />
+                        <br /> *@
 
                         @if (user.Id == default) // Only show password field for new users
                         {
@@ -78,11 +79,11 @@
                             <br />
                         }
 
-                        <BitChoiceGroup @bind-Value="user.Gender"
+                      @*   <BitChoiceGroup @bind-Value="user.Gender"
                                        Label="@Localizer[nameof(AppStrings.Gender)]"
                                        Items="genderOptions" />
                         <ValidationMessage For="() => user.Gender" />
-                        <br />
+                        <br /> *@
                         
                        
                       @*   <BitTextField @bind-Value="user.EmailTokenRequestedOn"
@@ -145,11 +146,11 @@
                                       Placeholder="@Localizer[nameof(AppStrings.EnterTokens)]" />
                         <ValidationMessage For="() => user.Tokens" />
                         <br /> *@
-                        <BitCheckbox @bind-Value="user.HasProfilePicture"
+                      @*   <BitCheckbox @bind-Value="user.HasProfilePicture"
                                       Label="@Localizer[nameof(AppStrings.HasProfilePicture)]"
                                       Placeholder="@Localizer[nameof(AppStrings.EnterHasProfilePicture)]" />
                         <ValidationMessage For="() => user.HasProfilePicture" />
-                        <br /> 
+                        <br />  *@
 
                     <BitStack Horizontal>
                         <BitButton ButtonType="BitButtonType.Button"

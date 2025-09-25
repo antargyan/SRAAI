@@ -5,7 +5,7 @@ public partial class UserDto : IValidatableObject
 {
     public Guid Id { get; set; }
 
-    [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]
+  /*  [Required(ErrorMessage = nameof(AppStrings.RequiredAttribute_ValidationError))]*/
     [Display(Name = nameof(AppStrings.UserName))]
     public string? UserName { get; set; }
 
