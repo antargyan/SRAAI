@@ -10,14 +10,16 @@
     <div class="signin-card">
         <div class="signin-header">
             <div class="logo-container">
-                <BitIcon IconName="@BitIconName.Signin" Size="BitSize.Large" Color="BitColor.Primary" />
+                <img src="@(CurrentTheme == AppThemeType.Dark ? "_content/SRAAI.Client.Core/images/Annexurelogo.png" : "_content/SRAAI.Client.Core/images/Annexurelogo.png")"
+                     alt="SRAAI Logo" 
+                     class="signin-logo" />
             </div>
             <BitText Typography="BitTypography.H3" Class="signin-title">
-                @Localizer[nameof(AppStrings.SignInPanelTitle)]
+                SignIn
             </BitText>
-            <BitText Typography="BitTypography.Body1" Color="BitColor.SecondaryForeground" Class="signin-subtitle">
+          @*   <BitText Typography="BitTypography.Body1" Color="BitColor.SecondaryForeground" Class="signin-subtitle">
                 Welcome back! Please sign in to your account
-            </BitText>
+            </BitText> *@
         </div>
 
         <EditForm Model="model" OnSubmit="WrapHandled(DoSignIn)" novalidate class="signin-form">

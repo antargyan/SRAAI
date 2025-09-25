@@ -6,6 +6,8 @@ namespace SRAAI.Client.Core.Components.Pages.Identity.SignIn;
 
 public partial class SignInPanel
 {
+    [CascadingParameter] public AppThemeType? CurrentTheme { get; set; }
+    
     private bool isWaiting;
     private bool isOtpSent;
     private bool isNewUser; // Assume the user is existing unless they provide an email or phone number that doesn't exists in database.
