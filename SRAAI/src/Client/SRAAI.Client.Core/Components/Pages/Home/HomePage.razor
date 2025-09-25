@@ -1,5 +1,6 @@
 @attribute [Route(PageUrls.Home)]
 @attribute [Route("{culture:nonfile?}" + PageUrls.Home)]
+@attribute [Authorize(Policy = AuthPolicies.PRIVILEGED_ACCESS)]
 @attribute [AppResponseCache(SharedMaxAge = 3600 * 24, MaxAge = 60 * 5)]
 @inherits AppPageBase
 

@@ -29,6 +29,9 @@ public partial class SignOutConfirmDialog
             isSigningOut = true;
 
             await AuthManager.SignOut(CurrentCancellationToken);
+            
+            // Redirect to sign-in page after sign-out
+            NavigationManager.NavigateTo(PageUrls.SignIn, forceLoad: true);
         }
         finally
         {
