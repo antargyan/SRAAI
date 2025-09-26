@@ -9,15 +9,7 @@ public partial class MainLayout
 
     private async Task SetNavPanelItems(ClaimsPrincipal authUser)
     {
-        navPanelItems =
-        [
-            new()
-            {
-                Text = localizer[nameof(AppStrings.Home)],
-                IconName = BitIconName.Home,
-                Url = PageUrls.Home,
-            }
-        ];
+        navPanelItems = [];
 
         var (dashboard, manageProductCatalog) = await (authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.AdminPanel.Dashboard),
             authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.AdminPanel.ManageProductCatalog));
