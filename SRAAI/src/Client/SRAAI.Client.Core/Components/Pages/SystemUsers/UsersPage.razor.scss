@@ -1,83 +1,434 @@
 @import '../../../Styles/abstracts/_media-queries.scss';
 @import '../../../Styles/abstracts/_bit-css-variables.scss';
 
-section {
+.user-list-container {
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    min-height: calc(100vh - 120px);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.grid-container {
-    overflow: auto;
-    height: calc(var(--app-height) - 14rem);
-
-    @include lt-md {
-        height: calc(var(--app-height) - 17rem);
+.page-header {
+    text-align: center;
+    margin-bottom: 32px;
+    
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 8px 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
-
-    @include lt-sm {
-        height: calc(var(--app-height) - 16rem);
+    
+    .page-subtitle {
+        font-size: 1.1rem;
+        color: #64748b;
+        margin: 0;
+        font-weight: 400;
     }
 }
 
-::deep {
-    .users-grid {
+.search-container {
+    margin-bottom: 24px;
+    
+    .search-box {
+        position: relative;
+        max-width: 500px;
+        margin: 0 auto;
+        
+        .search-input {
         width: 100%;
-        height: 100%;
-        border-spacing: 0;
-        background-color: $bit-color-background-secondary;
-
-        .name-col {
-            padding-inline-start: 16px;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            
+            &:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                transform: translateY(-1px);
+            }
         }
-
-        .count-col {
-            width: 110px;
+        
+        .loading-indicator {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
         }
+    }
+}
 
-        .color-col {
-            width: 70px;
+.action-buttons {
+    margin-bottom: 24px;
+    text-align: center;
+    
+    .add-user-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
+    }
+}
 
-        .actions-col {
-            width: 95px;
+.table-wrapper {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.loading-state, .empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    
+    .loading-spinner {
+        margin-bottom: 24px;
+        
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
+    }
+    
+    .empty-icon {
+        margin-bottom: 16px;
+        color: #94a3b8;
+    }
+    
+    h4 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #475569;
+        margin: 0 0 8px 0;
+    }
+    
+    p {
+        color: #64748b;
+        margin: 0;
+        font-size: 1rem;
+    }
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
 
         thead {
-            height: 44px;
-            background-color: $bit-color-background-tertiary;
-        }
-
-        td {
-            height: 44px;
-            white-space: nowrap;
-            border-bottom: 1px solid $bit-color-border-tertiary;
-        }
-
-        .col-options {
-            padding: 8px;
-        }
-
-        .col-options-button {
-            cursor: pointer;
-        }
-
-        .color-box {
-            width: 24px;
-            height: 24px;
-            display: block;
-            border-radius: 2px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        
+        th {
+            padding: 20px 24px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: white;
+            letter-spacing: 0.025em;
+            border: none;
+            
+            .header-content {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            &.fullname-header {
+                width: 50%;
+            }
+            
+            &.username-header {
+                width: 30%;
+            }
+            
+            &.actions-header {
+                width: 20%;
+                text-align: center;
+            }
         }
     }
+    
+    tbody {
+        tr {
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.2s ease;
+            
+            &:hover {
+                background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+            
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+        
+        td {
+            padding: 20px 24px;
+            vertical-align: middle;
+            
+            &.fullname-cell {
+                .user-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    
+                    .user-avatar {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        flex-shrink: 0;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        
+                        .avatar-image {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                        
+                        .avatar-placeholder {
+                            color: white;
+                        }
+                    }
+                    
+                    .user-details {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                        
+                        .fullname {
+                            font-size: 1.1rem;
+                            font-weight: 600;
+                            color: #1e293b;
+                            line-height: 1.4;
+                        }
+                        
+                        .email {
+                            font-size: 0.9rem;
+                            color: #64748b;
+                            font-weight: 400;
+                        }
+                    }
+                }
+            }
+            
+            &.username-cell {
+                .username-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    
+                    .username {
+                        font-size: 1rem;
+                        font-weight: 500;
+                        color: #334155;
+                        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                        background: #f8fafc;
+                        padding: 6px 12px;
+                        border-radius: 6px;
+                        border: 1px solid #e2e8f0;
+                        display: inline-block;
+                        max-width: fit-content;
+                    }
+                    
+                    .phone {
+                        font-size: 0.9rem;
+                        color: #64748b;
+                        font-weight: 400;
+                    }
+                }
+            }
+            
+            &.actions-cell {
+                text-align: center;
+                
+                .action-buttons {
+                    display: flex;
+                    gap: 8px;
+                    justify-content: center;
+                    
+                    .action-btn {
+                        padding: 8px 12px;
+                        border-radius: 6px;
+                        transition: all 0.2s ease;
+                        
+                        &.edit-btn {
+                            color: #3b82f6;
+                            
+                            &:hover {
+                                background: #dbeafe;
+                                color: #1d4ed8;
+                            }
+                        }
+                        
+                        &.delete-btn {
+                            color: #ef4444;
+                            
+                            &:hover {
+                                background: #fee2e2;
+                                color: #dc2626;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
-    .bitdatagrid-paginator {
-        padding: 8px;
-        font-size: 14px;
-        flex-wrap: nowrap;
-        padding-inline-start: 16px;
-        background-color: $bit-color-background-secondary;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
-        button {
-            cursor: pointer;
-            font-size: 12px;
+// Responsive design
+@include lt-lg {
+    .user-list-container {
+        padding: 16px;
+        margin: 8px;
+        border-radius: 12px;
+    }
+    
+    .page-header .page-title {
+        font-size: 2rem;
+    }
+    
+    .user-table {
+        thead th {
+            padding: 16px 12px;
+            font-size: 0.9rem;
+        }
+        
+        tbody td {
+            padding: 16px 12px;
+            
+            &.fullname-cell .user-info {
+                gap: 12px;
+                
+                .user-avatar {
+                    width: 40px;
+                    height: 40px;
+                }
+                
+                .user-details .fullname {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+}
+
+@include lt-md {
+    .user-list-container {
+        padding: 12px;
+        margin: 4px;
+    }
+    
+    .page-header {
+        margin-bottom: 24px;
+        
+        .page-title {
+            font-size: 1.75rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1rem;
+        }
+    }
+    
+    .search-container .search-box {
+        max-width: 100%;
+    }
+    
+    .user-table {
+        thead th {
+            padding: 12px 8px;
+            font-size: 0.85rem;
+        }
+        
+        tbody td {
+            padding: 12px 8px;
+            
+            &.fullname-cell .user-info {
+                gap: 10px;
+                
+                .user-avatar {
+                    width: 36px;
+                    height: 36px;
+                }
+                
+                .user-details {
+                    .fullname {
+                        font-size: 0.95rem;
+                    }
+                    
+                    .email {
+                        font-size: 0.8rem;
+                    }
+                }
+            }
+            
+            &.username-cell .username-info {
+                .username {
+                    font-size: 0.9rem;
+                    padding: 4px 8px;
+                }
+                
+                .phone {
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
+}
+
+@include lt-sm {
+    .user-table {
+        tbody td {
+            &.fullname-cell .user-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                
+                .user-avatar {
+                    width: 32px;
+                    height: 32px;
+                }
+            }
         }
     }
 }

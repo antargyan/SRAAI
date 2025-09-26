@@ -14,156 +14,96 @@
     }
 </PageTitle>
 
-<section>
-    <BitStack>
-        <BitStack Horizontal VerticalAlign="BitAlignment.Center" Gap="0.5rem">
+<section class="user-form-container">
+    <div class="form-header">
+        <div class="header-content">
             <BitButton Variant="BitVariant.Text"
                        Href="@PageUrls.UsersPage"
                        IconName="@BitIconName.Back"
-                       Title="@Localizer[nameof(AppStrings.Back)]" />
-            <BitText Typography="BitTypography.H5">
-                @if (user.Id == default)
-                {
-                    @Localizer[nameof(AppStrings.AddUser)]
-                }
-                else
-                {
-                    @Localizer[nameof(AppStrings.EditUser)]
-                }
-            </BitText>
-        </BitStack>
-        <BitCard FullSize>
+                       Title="@Localizer[nameof(AppStrings.Back)]"
+                       Class="back-btn" />
+            <div class="header-text">
+                <h2 class="form-title">
+                    @if (user.Id == default)
+                    {
+                        @Localizer[nameof(AppStrings.AddUser)]
+                    }
+                    else
+                    {
+                        @Localizer[nameof(AppStrings.EditUser)]
+                    }
+                </h2>
+                <p class="form-subtitle">
+                    @if (user.Id == default)
+                    {
+                        <text>Create a new user account</text>
+                    }
+                    else
+                    {
+                        <text>Update user information</text>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-wrapper">
+        <div class="form-card">
             <EditForm Model="user" OnValidSubmit="WrapHandled(Save)" novalidate>
                 <AppDataAnnotationsValidator />
 
-                <BitStack Gap="0.25rem">
+                <div class="form-content">
                     @if (isLoading)
                     {
-                        <BitEllipsisLoading />
+                        <div class="loading-overlay">
+                            <BitEllipsisLoading />
+                        </div>
                     }
 
-                      @*   <BitTextField @bind-Value="user.UserName"
-                                      Label="@Localizer[nameof(AppStrings.UserName)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterUserName)]" />
-                        <ValidationMessage For="() => user.UserName" />
-                        <br /> *@
-                    <BitTextField @bind-Value="user.Email"
-                                  Label="@Localizer[nameof(AppStrings.Email)]"
-                                  Placeholder="@Localizer[nameof(AppStrings.EnterEmail)]" />
-                    <ValidationMessage For="() => user.Email" />
-                    <br />
-                        <BitTextField @bind-Value="user.FullName"
-                                      Label="@Localizer[nameof(AppStrings.FullName)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterFullName)]" />
-                        <ValidationMessage For="() => user.FullName" />
-                        <br />
+                    <div class="form-fields">
+                        <div class="field-group">
+                            <BitTextField @bind-Value="user.FullName"
+                                          Label="@Localizer[nameof(AppStrings.FullName)]"
+                                          Placeholder="@Localizer[nameof(AppStrings.EnterFullName)]"
+                                          Class="form-field" />
+                            <ValidationMessage For="() => user.FullName" />
+                        </div>
 
-                @*     <BitDatePicker @bind-Value="user.BirthDate"
-                                   Label="@Localizer[nameof(AppStrings.BirthDate)]"
-                                   Placeholder="@Localizer[nameof(AppStrings.EnterBirthDate)]" />
-                    <ValidationMessage For="() => user.BirthDate" />
-                    <br /> *@
-                  
-                       @*  <BitTextField @bind-Value="user.PhoneNumber"
-                                      Label="@Localizer[nameof(AppStrings.PhoneNumber)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterPhoneNumber)]" />
-                        <ValidationMessage For="() => user.PhoneNumber" />
-                        <br /> *@
+                        <div class="field-group">
+                            <BitTextField @bind-Value="user.Email"
+                                          Label="@Localizer[nameof(AppStrings.Email)]"
+                                          Placeholder="@Localizer[nameof(AppStrings.EnterEmail)]"
+                                          Class="form-field" />
+                            <ValidationMessage For="() => user.Email" />
+                        </div>
 
-                        @if (user.Id == default) // Only show password field for new users
+                        @if (user.Id == default)
                         {
-                            <BitTextField @bind-Value="user.Password"
-                                          Label="@Localizer[nameof(AppStrings.Password)]"
-                                          Placeholder="@Localizer[nameof(AppStrings.Password)]"/>
-                            <ValidationMessage For="() => user.Password" />
-                            <br />
+                            <div class="field-group">
+                                <BitTextField @bind-Value="user.Password"
+                                              Label="@Localizer[nameof(AppStrings.Password)]"
+                                              Placeholder="@Localizer[nameof(AppStrings.Password)]"
+                                              Class="form-field" />
+                                <ValidationMessage For="() => user.Password" />
+                            </div>
                         }
+                    </div>
 
-                      @*   <BitChoiceGroup @bind-Value="user.Gender"
-                                       Label="@Localizer[nameof(AppStrings.Gender)]"
-                                       Items="genderOptions" />
-                        <ValidationMessage For="() => user.Gender" />
-                        <br /> *@
-                        
-                       
-                      @*   <BitTextField @bind-Value="user.EmailTokenRequestedOn"
-                                      Label="@Localizer[nameof(AppStrings.EmailTokenRequestedOn)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterEmailTokenRequestedOn)]" />
-                        <ValidationMessage For="() => user.EmailTokenRequestedOn" />
-                        <br />
-                        <BitTextField @bind-Value="user.PhoneNumberTokenRequestedOn"
-                                      Label="@Localizer[nameof(AppStrings.PhoneNumberTokenRequestedOn)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterPhoneNumberTokenRequestedOn)]" />
-                        <ValidationMessage For="() => user.PhoneNumberTokenRequestedOn" />
-                        <br />
-                        <BitTextField @bind-Value="user.ResetPasswordTokenRequestedOn"
-                                      Label="@Localizer[nameof(AppStrings.ResetPasswordTokenRequestedOn)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterResetPasswordTokenRequestedOn)]" />
-                        <ValidationMessage For="() => user.ResetPasswordTokenRequestedOn" />
-                        <br />
-                        <BitTextField @bind-Value="user.TwoFactorTokenRequestedOn"
-                                      Label="@Localizer[nameof(AppStrings.TwoFactorTokenRequestedOn)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterTwoFactorTokenRequestedOn)]" />
-                        <ValidationMessage For="() => user.TwoFactorTokenRequestedOn" />
-                        <br />
-                        <BitTextField @bind-Value="user.OtpRequestedOn"
-                                      Label="@Localizer[nameof(AppStrings.OtpRequestedOn)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterOtpRequestedOn)]" />
-                        <ValidationMessage For="() => user.OtpRequestedOn" />
-                        <br />
-                        <BitTextField @bind-Value="user.ElevatedAccessTokenRequestedOn"
-                                      Label="@Localizer[nameof(AppStrings.ElevatedAccessTokenRequestedOn)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterElevatedAccessTokenRequestedOn)]" />
-                        <ValidationMessage For="() => user.ElevatedAccessTokenRequestedOn" />
-                        <br />
-                        <BitTextField @bind-Value="user.Sessions"
-                                      Label="@Localizer[nameof(AppStrings.Sessions)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterSessions)]" />
-                        <ValidationMessage For="() => user.Sessions" />
-                        <br />
-                        <BitTextField @bind-Value="user.WebAuthnCredentials"
-                                      Label="@Localizer[nameof(AppStrings.WebAuthnCredentials)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterWebAuthnCredentials)]" />
-                        <ValidationMessage For="() => user.WebAuthnCredentials" />
-                        <br />  *@
-                        @*  <BitTextField @bind-Value="user.Roles"
-                                      Label="@Localizer[nameof(AppStrings.Roles)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterRoles)]" />
-                        <ValidationMessage For="() => user.Roles" />
-                        <br />
-                        <BitTextField @bind-Value="user.Claims"
-                                      Label="@Localizer[nameof(AppStrings.Claims)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterClaims)]" />
-                        <ValidationMessage For="() => user.Claims" />
-                        <br />
-                        <BitTextField @bind-Value="user.Logins"
-                                      Label="@Localizer[nameof(AppStrings.Logins)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterLogins)]" />
-                        <ValidationMessage For="() => user.Logins" />
-                        <br />
-                        <BitTextField @bind-Value="user.Tokens"
-                                      Label="@Localizer[nameof(AppStrings.Tokens)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterTokens)]" />
-                        <ValidationMessage For="() => user.Tokens" />
-                        <br /> *@
-                      @*   <BitCheckbox @bind-Value="user.HasProfilePicture"
-                                      Label="@Localizer[nameof(AppStrings.HasProfilePicture)]"
-                                      Placeholder="@Localizer[nameof(AppStrings.EnterHasProfilePicture)]" />
-                        <ValidationMessage For="() => user.HasProfilePicture" />
-                        <br />  *@
-
-                    <BitStack Horizontal>
+                    <div class="form-actions">
                         <BitButton ButtonType="BitButtonType.Button"
                                    Href="@PageUrls.UsersPage"
-                                   Variant="BitVariant.Outline">
+                                   Variant="BitVariant.Outline"
+                                   Class="cancel-btn">
                             @Localizer[nameof(AppStrings.Cancel)]
                         </BitButton>
-                        <BitButton IsLoading="isSaving" ButtonType="BitButtonType.Submit">
+                        <BitButton IsLoading="isSaving" 
+                                   ButtonType="BitButtonType.Submit"
+                                   Class="save-btn">
                             @Localizer[nameof(AppStrings.Save)]
                         </BitButton>
-                    </BitStack>
-                </BitStack>
+                    </div>
+                </div>
             </EditForm>
-        </BitCard>
-    </BitStack>
+        </div>
+    </div>
 </section>

@@ -5,80 +5,146 @@
 @using SRAAI.Shared.Dtos.Identity
 <PageTitle>@Localizer[nameof(AppStrings.UsersPageTitle)]</PageTitle>
 
-<section>
-    <BitStack>
-        <BitButton IconName="@BitIconName.Add" ReversedIcon
-                   OnClick="WrapHandled(CreateUser)">
+<section class="user-list-container">
+    <div class="page-header">
+        <h2 class="page-title">User Directory</h2>
+        <p class="page-subtitle">View all users with their full names and usernames</p>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <BitSearchBox @bind-Value="UserFullNameFilter"
+                          AutoFocus 
+                          DisableAnimation
+                          Immediate 
+                          DebounceTime="500"
+                          Placeholder="Search by full name or username..."
+                          Class="search-input" />
+            @if (isLoading)
+            {
+                <div class="loading-indicator">
+                    <BitEllipsisLoading CustomSize="24" />
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <BitButton IconName="@BitIconName.Add" 
+                   ReversedIcon
+                   OnClick="WrapHandled(CreateUser)"
+                   Class="add-user-btn">
             @Localizer[nameof(AppStrings.AddUser)]
         </BitButton>
-        <BitStack Gap="0" FillContent>
-            <div class="grid-container">
-                <BitDataGrid @ref="dataGrid"
-                             Class="users-grid"
-                             TGridItem="UserDto"
-                             Pagination="pagination"
-                             ItemsProvider="usersProvider">
-                    <BitDataGridPropertyColumn Title="@Localizer[nameof(AppStrings.FullName)]"
-                                               Align="BitDataGridAlign.Left"
-                                               Property="c => c!.FullName"
-                                               Class="name-col"
-                                               Sortable="true">
-                        <ColumnOptions>
-                            <BitStack Horizontal>
-                                <BitSearchBox @bind-Value="UserFullNameFilter"
-                                              AutoFocus DisableAnimation
-                                              Immediate DebounceTime="500"
-                                              Placeholder="@Localizer[(nameof(AppStrings.SearchOnFullName))]" />
-                                @if (isLoading)
-                                {
-                                    <BitEllipsisLoading CustomSize="32" />
-                                }
-                            </BitStack>
-                        </ColumnOptions>
-                    </BitDataGridPropertyColumn>
+    </div>
 
-                    
-                    
-                    <BitDataGridPropertyColumn Title="@Localizer[nameof(AppStrings.Gender)]"
-                                    Property="p => p!.Gender"
-                                    Align="BitDataGridAlign.Left"
-                                    Class="gender-col"
-                                    Sortable="true" />
-                    
-                    <BitDataGridPropertyColumn Title="@Localizer[nameof(AppStrings.BirthDate)]"
-                                    Property="p => p!.BirthDate"
-                                    Align="BitDataGridAlign.Left"
-                                    Class="birthdate-col"
-                                    Sortable="true" />
-                   
-                    <BitDataGridTemplateColumn Title="@Localizer[nameof(AppStrings.Action)]"
-                                               Align="BitDataGridAlign.Center"
-                                               Class="actions-col"
-                                               Context="user">
-                        <BitButton Variant="BitVariant.Text"
-                                   IconName="@BitIconName.Edit"
-                                   Title="@Localizer[(nameof(AppStrings.Edit))]"
-                                   OnClick="WrapHandled(() => EditUser(user!))" />
-                        <BitButton Color="BitColor.Error"
-                                   Variant="BitVariant.Text"
-                                   IconName="@BitIconName.Delete"
-                                   Title="@Localizer[(nameof(AppStrings.Delete))]"
-                                   OnClick="WrapHandled(() => { isDeleteDialogOpen = true; deletingUser = user; })" />
-                    </BitDataGridTemplateColumn>
-                </BitDataGrid>
+    <div class="table-wrapper">
+        @if (isLoading && users is null)
+        {
+            <div class="loading-state">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                </div>
+                <h4>Loading Users</h4>
+                <p>Please wait while we fetch the user data...</p>
             </div>
-            <BitDataGridPaginator Value="pagination"
-                                  SummaryFormat="v => string.Format(Localizer[nameof(AppStrings.PaginatorSummary)], v.TotalItemCount)"
-                                  GoToFirstButtonTitle="Go to first page"
-                                  GoToPrevButtonTitle="Go to previous page"
-                                  GoToNextButtonTitle="Go to next page"
-                                  GoToLastButtonTitle="Go to last page">
-                <TextTemplate Context="value">
-                    <span>@Localizer[nameof(AppStrings.Page)] <b>@(value.CurrentPageIndex + 1)</b> @Localizer[nameof(AppStrings.Of)] <b>@(value.LastPageIndex + 1)</b></span>
-                </TextTemplate>
-            </BitDataGridPaginator>
-        </BitStack>
-    </BitStack>
+        }
+        else if (users is null || !users.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <BitIcon IconName="@BitIconName.People" Size="@BitSize.Large" />
+                </div>
+                <h4>No Users Found</h4>
+                <p>There are no users to display at the moment.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-container">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th class="fullname-header">
+                                <div class="header-content">
+                                    <BitIcon IconName="@BitIconName.Contact" Size="@BitSize.Small" />
+                                    <span>Full Name</span>
+                                </div>
+                            </th>
+                            <th class="username-header">
+                                <div class="header-content">
+                                    <BitIcon IconName="@BitIconName.Contact" Size="@BitSize.Small" />
+                                    <span>Username</span>
+                                </div>
+                            </th>
+                            <th class="actions-header">
+                                <div class="header-content">
+                                    <BitIcon IconName="@BitIconName.Settings" Size="@BitSize.Small" />
+                                    <span>Actions</span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in users)
+                        {
+                            <tr class="user-row">
+                                <td class="fullname-cell">
+                                    <div class="user-info">
+                                        <div class="user-avatar">
+                                            @if (user.HasProfilePicture)
+                                            {
+                                                <img src="@user.GetProfileImageUrl(AbsoluteServerAddress)" 
+                                                     alt="@user.FullName" 
+                                                     class="avatar-image" />
+                                            }
+                                            else
+                                            {
+                                                <div class="avatar-placeholder">
+                                                    <BitIcon IconName="@BitIconName.Contact" Size="@BitSize.Medium" />
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="user-details">
+                                            <span class="fullname">@user.FullName</span>
+                                            @if (!string.IsNullOrEmpty(user.Email))
+                                            {
+                                                <span class="email">@user.Email</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="username-cell">
+                                    <div class="username-info">
+                                        <span class="username">@user.UserName</span>
+                                        @if (!string.IsNullOrEmpty(user.PhoneNumber))
+                                        {
+                                            <span class="phone">@user.PhoneNumber</span>
+                                        }
+                                    </div>
+                                </td>
+                                <td class="actions-cell">
+                                    <div class="action-buttons">
+                                        <BitButton Variant="BitVariant.Text"
+                                                   IconName="@BitIconName.Edit"
+                                                   Title="@Localizer[(nameof(AppStrings.Edit))]"
+                                                   OnClick="WrapHandled(() => EditUser(user!))"
+                                                   Class="action-btn edit-btn" />
+                                        <BitButton Color="BitColor.Error"
+                                                   Variant="BitVariant.Text"
+                                                   IconName="@BitIconName.Delete"
+                                                   Title="@Localizer[(nameof(AppStrings.Delete))]"
+                                                   OnClick="WrapHandled(() => { isDeleteDialogOpen = true; deletingUser = user; })"
+                                                   Class="action-btn delete-btn" />
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
 </section>
 
 <BitDialog OnOk="WrapHandled(DeleteUser)"

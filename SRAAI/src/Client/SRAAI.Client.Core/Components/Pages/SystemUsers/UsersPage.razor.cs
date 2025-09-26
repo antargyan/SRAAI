@@ -6,17 +6,13 @@ namespace SRAAI.Client.Core.Components.Pages.SystemUsers;
 [Authorize]
 public partial class UsersPage
 {
-
     [AutoInject] ISystemUserController userController = default!;
 
     private bool isLoading;
     private bool isDeleteDialogOpen;
     private UserDto? deletingUser;
-    private BitDataGrid<UserDto>? dataGrid;
     private string userFullNameFilter = string.Empty;
-
-    private BitDataGridItemsProvider<UserDto> usersProvider = default!;
-    private BitDataGridPaginationState pagination = new() { ItemsPerPage = 10 };
+    private List<UserDto>? users;
 
     private string UserFullNameFilter
     {
@@ -28,55 +24,53 @@ public partial class UsersPage
         }
     }
 
-
     protected override async Task OnInitAsync()
     {
-        PrepareGridDataProvider();
-
+        await LoadUsers();
         await base.OnInitAsync();
     }
 
-    private void PrepareGridDataProvider()
+    private async Task LoadUsers()
     {
-        usersProvider = async req =>
+        isLoading = true;
+        StateHasChanged();
+
+        try
         {
-            isLoading = true;
-
-            try
-            {
-                var odataQ = new ODataQuery
-                {
-                    Top = req.Count ?? 10,
-                    Skip = req.StartIndex,
-                    OrderBy = string.Join(", ", req.GetSortByProperties().Select(p => $"{p.PropertyName} {(p.Direction == BitDataGridSortDirection.Ascending ? "asc" : "desc")}"))
-                };
-
-                if (string.IsNullOrEmpty(UserFullNameFilter) is false)
-                {
-                    odataQ.Filter = $"contains(tolower({nameof(UserDto.FullName)}),'{UserFullNameFilter.ToLower()}')";
-                }
-
-                var data = await userController.GetUsers(CurrentCancellationToken);
-
-                return BitDataGridItemsProviderResult.From(data!.Items!, (int)data!.TotalCount);
-            }
-            catch (Exception exp)
-            {
-                ExceptionHandler.Handle(exp);
-                return BitDataGridItemsProviderResult.From(new List<UserDto> { }, 0);
-            }
-            finally
-            {
-                isLoading = false;
-
-                StateHasChanged();
-            }
-        };
+            var data = await userController.GetUsers(CurrentCancellationToken);
+            users = data?.Items?.ToList() ?? new List<UserDto>();
+        }
+        catch (Exception exp)
+        {
+            ExceptionHandler.Handle(exp);
+            users = new List<UserDto>();
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
     }
 
     private async Task RefreshData()
     {
-        await dataGrid!.RefreshDataAsync();
+        if (string.IsNullOrEmpty(UserFullNameFilter))
+        {
+            await LoadUsers();
+        }
+        else
+        {
+            // Filter users locally for better performance
+            var allUsers = await userController.GetUsers(CurrentCancellationToken);
+            var filteredUsers = allUsers?.Items?.Where(u => 
+                (u.FullName?.Contains(UserFullNameFilter, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (u.UserName?.Contains(UserFullNameFilter, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (u.Email?.Contains(UserFullNameFilter, StringComparison.OrdinalIgnoreCase) ?? false)
+            ).ToList() ?? new List<UserDto>();
+            
+            users = filteredUsers;
+            StateHasChanged();
+        }
     }
 
     private async Task CreateUser()
