@@ -11,7 +11,7 @@ public static partial class PageUrls
     public const string Products = "/products";
     public const string AddOrEditProduct = "/add-edit-product";
     public const string ExcelImport = "/excel-import";
-    public const string AbhayYojana = "/abhay-yojana";
+    public const string AbhayYojana = "/smartaI";
     public const string SummaryPage = "/summary";
     public const string BuilderPage = "/builderdata";
     public const string Authorize = "/authorize";

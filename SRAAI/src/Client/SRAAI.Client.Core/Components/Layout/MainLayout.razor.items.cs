@@ -9,8 +9,15 @@ public partial class MainLayout
 
     private async Task SetNavPanelItems(ClaimsPrincipal authUser)
     {
-        navPanelItems = [];
-
+        navPanelItems =
+       [
+           new()
+            {
+                Text = localizer[nameof(AppStrings.Home)],
+                IconName = BitIconName.Home,
+                Url = PageUrls.Home,
+            }
+       ];
         var (dashboard, manageProductCatalog) = await (authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.AdminPanel.Dashboard),
             authorizationService.IsAuthorizedAsync(authUser!, AppFeatures.AdminPanel.ManageProductCatalog));
 
@@ -25,14 +32,14 @@ public partial class MainLayout
 
             navPanelItems.Add(adminPanelItem);*/
 
-            BitNavItem abhayyoganaPanelItem = new()
+            BitNavItem smartaIPanelItem = new()
             {
-                Text = localizer[nameof(AppStrings.SRAAbhayYojana)],
+                Text = localizer[nameof(AppStrings.SmartAI)],
                 IconName = BitIconName.Database,
                 ChildItems = []
             };
 
-            navPanelItems.Add(abhayyoganaPanelItem);
+            navPanelItems.Add(smartaIPanelItem);
 
            /* if (dashboard)
             {
@@ -46,27 +53,27 @@ public partial class MainLayout
 
             if (manageProductCatalog)
             {
-               /* adminPanelItem.ChildItems.AddRange(
-                [
-                    new()
-                        {
-                            Text = localizer[nameof(AppStrings.Categories)],
-                            IconName = BitIconName.BuildQueue,
-                            Url = PageUrls.Categories,
-                        },
-                        new()
-                        {
-                            Text = localizer[nameof(AppStrings.Products)],
-                            IconName = BitIconName.Product,
-                            Url = PageUrls.Products,
-                        }
-                ]);*/
+                /* adminPanelItem.ChildItems.AddRange(
+                 [
+                     new()
+                         {
+                             Text = localizer[nameof(AppStrings.Categories)],
+                             IconName = BitIconName.BuildQueue,
+                             Url = PageUrls.Categories,
+                         },
+                         new()
+                         {
+                             Text = localizer[nameof(AppStrings.Products)],
+                             IconName = BitIconName.Product,
+                             Url = PageUrls.Products,
+                         }
+                 ]);*/
 
-                abhayyoganaPanelItem.ChildItems.AddRange(
+                smartaIPanelItem.ChildItems.AddRange(
                 [
                     new()
                         {
-                            Text = localizer[nameof(AppStrings.AbhayYojana)],
+                            Text = localizer[nameof(AppStrings.SmartAI)],
                             IconName = BitIconName.XRay,
                             Url = PageUrls.AbhayYojana,
                         }

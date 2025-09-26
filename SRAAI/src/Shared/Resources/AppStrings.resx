@@ -1369,4 +1369,7 @@ After reaching {0}, extra sign-ins will have reduced functions.</value>
   <data name="EnterPhoneNumber" xml:space="preserve">
     <value>EnterPhoneNumber</value>
   </data>
+  <data name="SmartAI" xml:space="preserve">
+    <value>SmartAI</value>
+  </data>
 </root>
