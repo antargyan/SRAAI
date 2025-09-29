@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Presentation;
 using DocumentFormat.OpenXml.Spreadsheet;
 using SRAAI.Shared.Dtos.AbhayYojana;
 using SRAAI.Shared.Dtos.Summary;
@@ -28,6 +29,19 @@ public partial class AbhayYojanaPage : AppPageBase
         await LoadApplications();
         await LoadStatistics();
     }
+
+
+    private BuilderStep CurrentStep = BuilderStep.None;
+    private enum BuilderStep
+    {
+        None,
+        ImportOriginal,
+        ImportAddendum,
+        ViewAnalytics,
+        ExportData,
+        DownloadSample
+    }
+
 
     private async Task LoadApplications()
     {
@@ -73,6 +87,7 @@ public partial class AbhayYojanaPage : AppPageBase
                 Convert.ToBase64String(bytes));
             
             SnackBarService.Success("Sample Excel template downloaded successfully!");
+            CurrentStep = BuilderStep.DownloadSample;
         }
         catch (Exception ex)
         {
@@ -85,6 +100,7 @@ public partial class AbhayYojanaPage : AppPageBase
         try
         {
             NavigationManager.NavigateTo($"{PageUrls.SummaryPage}");
+ 
         }
         catch
         {}
@@ -147,7 +163,7 @@ public partial class AbhayYojanaPage : AppPageBase
             // For now, just show success message
             // The import result will be displayed when the data is refreshed
             SnackBarService.Success("Excel imported successfully. Please check the results below.");
-            
+            CurrentStep = BuilderStep.ImportOriginal;
             StateHasChanged();
         }
         catch (Exception ex)
@@ -166,7 +182,7 @@ public partial class AbhayYojanaPage : AppPageBase
             // For now, just show success message
             // The import result will be displayed when the data is refreshed
             SnackBarService.Success("Addendum Excel Update successfully. Please check the results below.");
-
+            CurrentStep = BuilderStep.ImportAddendum;
             StateHasChanged();
         }
         catch (Exception ex)

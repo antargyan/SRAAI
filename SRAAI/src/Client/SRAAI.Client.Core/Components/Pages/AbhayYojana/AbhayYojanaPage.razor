@@ -84,7 +84,8 @@
             <i class="fas fa-file-download fa-2x text-info mb-2"></i>
             <h5 class="card-title">Download Sample</h5>
             <p class="card-text">Get Excel template with sample data</p>
-            <button type="button" class="btn btn-success px-4" @onclick="DownloadSampleExcel">
+            <button type="button" class="btn btn-success px-4" @onclick="DownloadSampleExcel"
+                    disabled="@(CurrentStep != BuilderStep.None && CurrentStep != BuilderStep.ImportAddendum)">
                 <i class="fas fa-file-download me-2"></i> Download File
             </button>
         </div>
@@ -114,7 +115,7 @@
                         <LabelTemplate>
                             <button type="button" 
                                     class="btn-action btn-primary"
-                                    disabled="@isBusy"
+                                    disabled="@(CurrentStep != BuilderStep.DownloadSample || isBusy)"
                                     @onclick="() => fileUploadRef.Browse()">
                                 <i class="fas fa-upload me-2"></i>
                                 Choose File
@@ -147,7 +148,7 @@
                         <LabelTemplate>
                             <button type="button" 
                                     class="btn-action btn-success"
-                                    disabled="@isBusy"
+                                    disabled="@(CurrentStep != BuilderStep.ImportOriginal || isBusy)"
                                     @onclick="() => fileUpdateRef.Browse()">
                                 <i class="fas fa-file-import me-2"></i>
                                 Choose File
@@ -167,7 +168,7 @@
                     <p class="card-description">Access detailed reports and statistics</p>
                     <button type="button"
                             class="btn-action btn-info w-100"
-                            @onclick="GoToSummary">
+                            @onclick="GoToSummary" >
                         <i class="fas fa-chart-bar me-2"></i>
                         View Results
                     </button>
@@ -630,6 +631,7 @@
         border-radius: 12px;
         font-weight: 600;
         border: none;
+
         transition: all 0.3s ease;
         text-decoration: none;
         display: inline-flex;
@@ -638,6 +640,12 @@
         min-width: 140px;
     }
 
+        .btn-action:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        pointer-events: none;
+        transform: none !important;
+    }
     .btn-primary {
         background: var(--primary-gradient);
         color: white;
