@@ -72,14 +72,24 @@
 
     <!-- Action Tools Section -->
     <div class="container-fluid py-5">
-        @* <div class="row">
-            <div class="col-12">
-                <div class="section-header text-center mb-5">
-                    <h2 class="section-title">Data Management Tools</h2>
-                    <p class="section-subtitle">Powerful tools for importing, processing, and exporting application data</p>
-                </div>
-            </div>
-        </div> *@
+        <div class="card shadow p-4 text-center">
+            <h6 class="text-primary fw-bold mb-3">
+                NOTE : Please Follow these instructions for uploading Excel
+            </h6>
+            <ol class="text-start mb-4">
+                <li>The AI application only supports excel sheet with <b>UNICODE supported language fonts</b></li>
+                <li><b>Before uploading please download the sample file</b></li>
+            </ol>
+
+            <i class="fas fa-file-download fa-2x text-info mb-2"></i>
+            <h5 class="card-title">Download Sample</h5>
+            <p class="card-text">Get Excel template with sample data</p>
+            <button type="button" class="btn btn-success px-4" @onclick="DownloadSampleExcel">
+                <i class="fas fa-file-download me-2"></i> Download File
+            </button>
+        </div>
+
+
 
         <div class="row g-4">
             <!-- Import Original Annexure -->
@@ -182,23 +192,7 @@
             </div>
 
 
-             <!-- Download Sample -->
-            <div class="col-lg-3 col-md-6">
-                <div class="action-card sample-card">
-                    <div class="card-icon">
-                        <i class="fas fa-file-download"></i>
-                    </div>
-                    <h5 class="card-title">Download Sample</h5>
-                    <p class="card-description">Get Excel template with sample data</p>
-                    <button type="button" 
-                            class="btn-action btn-secondary w-100"
-                            @onclick="DownloadSampleExcel">
-                        <i class="fas fa-file-download me-2"></i>
-                        Download Sample
-                    </button>
-                </div>
-            </div>
-
+           
           
         </div>
     </div>
