@@ -27,20 +27,20 @@
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <div class="hero-content">
-                        <div class="hero-badge animate__animated animate__fadeInDown">
+                       @*  <div class="hero-badge animate__animated animate__fadeInDown">
                             <i class="fas fa-shield-alt me-2"></i>
                             Government Housing Scheme
-                        </div>
+                        </div> *@
                         <h1 class="hero-title animate__animated animate__fadeInUp animate__delay-1s">
-                            SmartAI <span class="text-gradient">Applications</span>
+                            SmartAI <span class="text-gradient"></span>
                         </h1>
                         <p class="hero-description animate__animated animate__fadeInUp animate__delay-2s">
-                            Comprehensive management system for slum dweller applications with advanced Excel processing capabilities
+                            An AI-enabled Excel sheet comparison system automatically detects, updates, and summarizes differences between sheets in Marathi Unicode text —using fuzzy matching and natural-language insights—while ensuring accurate updates with minimal manual effort
                         </p>
                         <div class="hero-stats animate__animated animate__fadeInUp animate__delay-3s">
                             <div class="stat-item">
                                 <div class="stat-number">@(applications?.Count() ?? 0)</div>
-                                <div class="stat-label">Total Applications</div>
+                                <div class="stat-label">Total Applicants</div>
                             </div>
                             <div class="stat-item">
                                 <div class="stat-number">@(applications?.Count(a => a.EligibilityStatus?.Contains("पात्र") == true) ?? 0)</div>
@@ -114,23 +114,7 @@
                 </div>
             </div>
 
-            <!-- Export Latest Annexure -->
-            <div class="col-lg-3 col-md-6">
-                <div class="action-card export-card">
-                    <div class="card-icon">
-                        <i class="fas fa-download"></i>
-                    </div>
-                    <h5 class="card-title">Export Data</h5>
-                    <p class="card-description">Generate and download formatted Excel reports</p>
-                    <button type="button" 
-                            class="btn-action btn-warning w-100"
-                            @onclick="ExportToExcel">
-                        <i class="fas fa-download me-2"></i>
-                        Export Excel
-                    </button>
-                </div>
-            </div>
-
+           
             <!-- Import Addendum -->
             <div class="col-lg-3 col-md-6">
                 <div class="action-card update-card">
@@ -163,6 +147,41 @@
                 </div>
             </div>
 
+            <!-- View Results -->
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card analytics-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h5 class="card-title">View Analytics</h5>
+                    <p class="card-description">Access detailed reports and statistics</p>
+                    <button type="button"
+                            class="btn-action btn-info w-100"
+                            @onclick="GoToSummary">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        View Results
+                    </button>
+                </div>
+            </div>
+
+            <!-- Export Latest Annexure -->
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card export-card">
+                    <div class="card-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h5 class="card-title">Export Data</h5>
+                    <p class="card-description">Generate and download formatted Excel reports</p>
+                    <button type="button"
+                            class="btn-action btn-warning w-100"
+                            @onclick="ExportToExcel">
+                        <i class="fas fa-download me-2"></i>
+                        Export Excel
+                    </button>
+                </div>
+            </div>
+
+
          @*    <!-- Download Sample -->
             <div class="col-lg-3 col-md-6">
                 <div class="action-card sample-card">
@@ -180,22 +199,7 @@
                 </div>
             </div> *@
 
-            <!-- View Results -->
-            <div class="col-lg-3 col-md-6">
-                <div class="action-card analytics-card">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <h5 class="card-title">View Analytics</h5>
-                    <p class="card-description">Access detailed reports and statistics</p>
-                    <button type="button" 
-                            class="btn-action btn-info w-100"
-                            @onclick="GoToSummary">
-                        <i class="fas fa-chart-bar me-2"></i>
-                        View Results
-                    </button>
-                </div>
-            </div>
+          
         </div>
     </div>
 
