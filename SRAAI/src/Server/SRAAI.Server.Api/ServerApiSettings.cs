@@ -1,5 +1,6 @@
-﻿using AdsPush.Abstraction.Settings;
-using System.Text;
+﻿using System.Text;
+using System.Text.RegularExpressions;
+using AdsPush.Abstraction.Settings;
 using SRAAI.Server.Api.Services;
 using SRAAI.Server.Shared;
 
@@ -30,6 +31,7 @@ public partial class ServerApiSettings : ServerSharedSettings
 
     public AdsPushFirebaseSettings? AdsPushFirebase { get; set; }
 
+    public Uri[] AllowedOrigins { get; set; } = [];
     public AdsPushAPNSSettings? AdsPushAPNS { get; set; }
 
     public CloudflareOptions? Cloudflare { get; set; }
@@ -95,6 +97,21 @@ public partial class ServerApiSettings : ServerSharedSettings
 
         return validationResults;
     }
+    internal bool IsAllowedOrigin(Uri origin)
+    {
+        return AllowedOrigins.Any(allowedOrigin => allowedOrigin == origin)
+            || AllowedOriginsRegex().IsMatch(origin.ToString());
+    }
+
+    /// <summary>
+    /// Blazor Hybrid's webview, localhost, devtunnels, github codespaces.
+    /// </summary>
+#if Development
+    [GeneratedRegex(@"^(http|https|app):\/\/(localhost|0\.0\.0\.0|0\.0\.0\.1|127\.0\.0\.1|.*?devtunnels\.ms|.*?github\.dev)(:\d+)?(\/.*)?$")]
+#else
+    [GeneratedRegex(@"^(http|https|app):\/\/(localhost|0\.0\.0\.0|0\.0\.0\.1|127\.0\.0\.1)(:\d+)?(\/.*)?$")]
+#endif
+    private partial Regex AllowedOriginsRegex();
 }
 
 public partial class AppIdentityOptions : IdentityOptions

@@ -117,11 +117,10 @@ public static partial class Program
                 ServerApiSettings settings = new();
                 configuration.Bind(settings);
 
-                policy.SetIsOriginAllowed(origin => Uri.TryCreate(origin, UriKind.Absolute, out var uri) && settings.IsTrustedOrigin(uri))
+                policy.SetIsOriginAllowed(origin => settings.IsAllowedOrigin(new Uri(origin)))
                       .AllowAnyHeader()
                       .AllowAnyMethod()
-                      .WithExposedHeaders(HeaderNames.RequestId, 
-                            HeaderNames.Age, "App-Cache-Response", "X-App-Platform", "X-App-Version", "X-Origin");
+                      .WithExposedHeaders(HeaderNames.RequestId, "Age", "App-Cache-Response");
             });
         });
 
