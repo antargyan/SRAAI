@@ -773,5 +773,144 @@ public partial class AbhayYojanaController : AppControllerBase
         return result;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> DownloadSampleExcel(CancellationToken cancellationToken = default)
+    {
+        using var workbook = new XLWorkbook();
+        var ws = workbook.Worksheets.Add("Sample Template");
+
+        // Add the main header
+        ws.Cell(1, 1).Value = 
+            "शासन, गृहनिर्माण विभाग यांचेकडील निर्णय क्र. विसआ-2023/प्र.क्र. 159/झोपनि-2, दि. 01/10/2024 अन्वये दि. 01/01/2011 पूर्वी निर्गमित परिशिष्ट-II मधील हस्तांतरीत झोपडीधारकांचे हस्तांतरण नियमानुकूल करण्यासाठी एकवेळची अभय योजनेनुसार झोपडीधारकाचे पात्र/ अपात्रतेबाबत पुरवणी परिशिष्ट - II संस्थेचे नाव : मुंबई शहर जिल्हयातील माहिम महसूल विभागातील सि.टी.एस.क्र.  1500(पै) व इतर या मिळकतीवर असलेल्या नवकिरण वेल्फेअर एस. आर.ए.सहकारी गृहनिर्माण संस्था(नियोजित)(सदरचे पुरवणी परिशिष्ट - II या कार्यालयाचे पत्र क्र.सप्रा - 1 / टे - 1 - प्र / कावि - 1406 / 25, दि. 06 / 05 / 2025 सोबत वाचावे.)";
+
+        ws.Range(1, 1, 1, 13).Merge().Style
+            .Font.SetBold(true)
+            .Font.SetFontSize(12)
+            .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+            .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
+            .Alignment.SetWrapText(true);
+
+        // Add column headers
+        ws.Cell(2, 1).Value = "अ.क्र.";
+        ws.Cell(2, 2).Value = "मूळपरि - II मधील झो.क्र.";
+        ws.Cell(2, 3).Value = "मूळ परिशिष्ट -II मधील झोपडीधारकाचे नाव";
+        ws.Cell(2, 4).Value = "विहीत जोडपत्र दाखल केलेल्या अर्जदाराचे नाव";
+        ws.Cell(2, 5).Value = "मतदार यादीमधील तपशील";
+        ws.Range(2, 5, 2, 8).Merge();
+
+        ws.Cell(2, 9).Value = "झोपडीचा वापर";
+        ws.Cell(2, 10).Value = "झोपडी खालील चटई क्षेत्र (चौ.फु.)";
+        ws.Cell(2, 11).Value = "अर्जदारांनी अभय योजनेनुसार सादर केलेल्या प्रमुख पुराव्यांचा तपशील";
+        ws.Cell(2, 12).Value = "सुधारीत विकास नियंत्रण नियमावली 33(10) नुसार सक्षम प्राधिकरणाचे पात्रतेबाबत अभिप्राय";
+        ws.Range(2, 12, 2, 13).Merge();
+
+        ws.Cell(3, 5).Value = "वर्ष";
+        ws.Cell(3, 6).Value = "भाग क्र.";
+        ws.Cell(3, 7).Value = "मतदार यादीतील अनु. क्र.";
+        ws.Cell(3, 8).Value = "मतदार यादीतील बांधकाम क्रमांक";
+        ws.Cell(3, 12).Value = "पात्र/अपात्र/अनिश्चित";
+        ws.Cell(3, 13).Value = "शेरा";
+
+        // Add column numbers
+        string[] colNums = { "1", "2", "3", "4अ", "4ब", "4क", "4ड", "5", "6", "7", "8", "9", "10" };
+        for (int i = 0; i < colNums.Length; i++)
+            ws.Cell(4, i + 1).Value = colNums[i];
+
+        // Style the header
+        var headerRange = ws.Range(2, 1, 4, 13);
+        headerRange.Style.Font.Bold = true;
+        headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+        headerRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+        headerRange.Style.Alignment.WrapText = true;
+        headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+        headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+        // Add sample data rows
+        var sampleData = new[]
+        {
+            new { Serial = 1, SlumNo = 1001, OriginalName = "राम शर्मा", ApplicantName = "राम शर्मा", Year = 2023, Part = "A", SerialNo = 12345, Bound = "ABC", Usage = "निवासी", Area = 250.5, Evidence = "मतदार पहचान पत्र, राहण्याचा पुरावा", Status = "पात्र", Remarks = "सर्व पुरावे पूर्ण" },
+            new { Serial = 2, SlumNo = 1002, OriginalName = "सीता देवी", ApplicantName = "सीता देवी", Year = 2023, Part = "B", SerialNo = 12346, Bound = "XYZ", Usage = "निवासी", Area = 200.0, Evidence = "मतदार पहचान पत्र", Status = "पात्र", Remarks = "पुरावे पूर्ण" },
+            new { Serial = 3, SlumNo = 1003, OriginalName = "हरी ओम", ApplicantName = "हरी ओम", Year = 2023, Part = "C", SerialNo = 12347, Bound = "DEF", Usage = "अनिवासी", Area = 180.0, Evidence = "अपूर्ण पुरावे", Status = "अपात्र", Remarks = "पुरावे अपूर्ण" },
+            new { Serial = 4, SlumNo = 1004, OriginalName = "गीता सिंह", ApplicantName = "गीता सिंह", Year = 2023, Part = "D", SerialNo = 12348, Bound = "GHI", Usage = "संयुक्त", Area = 300.0, Evidence = "मतदार पहचान पत्र, राहण्याचा पुरावा, आय प्रमाणपत्र", Status = "पात्र", Remarks = "सर्व पुरावे पूर्ण" },
+            new { Serial = 5, SlumNo = 1005, OriginalName = "राज कुमार", ApplicantName = "राज कुमार", Year = 2023, Part = "E", SerialNo = 12349, Bound = "JKL", Usage = "धारस्थळ", Area = 150.0, Evidence = "अपूर्ण पुरावे", Status = "अनिश्चित", Remarks = "पुरावे तपासणी अंतर्गत" }
+        };
+
+        int row = 5;
+        foreach (var data in sampleData)
+        {
+            ws.Cell(row, 1).Value = data.Serial;
+            ws.Cell(row, 2).Value = data.SlumNo;
+            ws.Cell(row, 3).Value = data.OriginalName;
+            ws.Cell(row, 4).Value = data.ApplicantName;
+            ws.Cell(row, 5).Value = data.Year;
+            ws.Cell(row, 6).Value = data.Part;
+            ws.Cell(row, 7).Value = data.SerialNo;
+            ws.Cell(row, 8).Value = data.Bound;
+            ws.Cell(row, 9).Value = data.Usage;
+            ws.Cell(row, 10).Value = data.Area;
+            ws.Cell(row, 11).Value = data.Evidence;
+            ws.Cell(row, 12).Value = data.Status;
+            ws.Cell(row, 13).Value = data.Remarks;
+
+            // Style the data row
+            ws.Range(row, 1, row, 13).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Range(row, 1, row, 13).Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+            ws.Range(row, 1, row, 13).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            ws.Range(row, 1, row, 13).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+            ws.Range(row, 1, row, 13).Style.Alignment.WrapText = true;
+
+            row++;
+
+            // Add signature row for each application
+            ws.Range(row, 1, row, 13).Merge().Value = 
+                "(अभिजीत भांडे-पाटील) सक्षम प्राधिकारी - 1, झोपडपट्टी पुनर्वसन प्राधिकरण, मुंबई";
+            ws.Range(row, 1, row, 13).Style.Font.Bold = true;
+            ws.Range(row, 1, row, 13).Style
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
+                .Alignment.SetWrapText(true);
+            ws.Range(row, 1, row, 13).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+
+            row++;
+
+            // Add notice row for each application
+            ws.Cell(row, 1).Value = "सूचना:";
+            ws.Range(row, 2, row, 13).Merge().Value = 
+                "1) प्रस्तुत झोपडपट्टीधारकाच्या पात्रतेबाबत व अन्य बाबी संबंधीचा निर्णय हा त्यांनी स्वयंसाक्षांकित पुरावे ग्राह्य धरुन तसेच सादर केलेल्या प्रतिज्ञापत्राआधारे दिलेला आहे. त्याचे कुटुंबातील सदस्यांचे बृहन्मुंबई म.न.पा. अंतर्गत घर असल्याचे अथवा यापूर्वी झोपडपट्टी पुनर्वसन योजना अगर अन्य शासकीय/निमशासकीय योजनेखाली लाभ मिळाला असल्यास अगर मिळण्याचे प्रस्तावित असल्यास त्यांनी केलेले पुरावे व प्रतिज्ञापत्र बनावट अगर खोटे असल्याचे निष्पन्न झाल्यास हा निर्णय आपोआप रद्द ठरेल व त्यांना मिळालेला लाभ झोपडपट्टी पुनर्वसन प्राधिकरण काढून घेईल व त्याचप्रमाणे त्यांचेविरद्ध भारतीय दंड विधानातील व अन्य प्रचलीत कायद्याआधारे फौजदारी गुन्हा दाखल होईल." +
+                "2) सदर निर्णय झोपडीधारकास अमान्य असल्यास अगर सदर झोपडीधारकाच्या पात्रतेच्या निर्णयावर कोणाही भारतीय नागरीकाचा आक्षेप असल्यास, त्याबाबत महाराष्ट्र झोपडपट्टी क्षेत्र(सु.नि.व पु.) अधिनियम 1971 चे कलम 35 अन्वये अपर जिल्हाधिकारी तथा अपिलीय प्राधिकारी, मुंबई शहर यांचे प्राधिकरण, पहिला मजला, जुने जकात घर, शहिद भगतसिंग मार्ग, फोर्ट, मुंबई 400 001 यांचेकडे अपिल दाखल करण्याची तरतूद आहे.";
+            ws.Range(row, 1, row, 13).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            ws.Range(row, 1, row, 13).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+            ws.Range(row, 2, row, 13).Style.Alignment.WrapText = true;
+            ws.Range(row, 2, row, 13).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left);
+
+            row++;
+        }
+
+        // Adjust column widths
+        ws.Columns().AdjustToContents();
+        foreach (var col in ws.ColumnsUsed())
+        {
+            if (col.Width > 60) col.Width = 60; // max width
+            col.Style.Alignment.WrapText = true;
+        }
+        ws.Rows().AdjustToContents();
+
+        // Freeze header rows
+        ws.SheetView.FreezeRows(4);
+
+        // Set zoom and page setup
+        ws.SheetView.ZoomScale = 90;
+        ws.PageSetup.PagesWide = 1;
+        ws.PageSetup.PagesTall = 0;
+
+        using var stream = new MemoryStream();
+        workbook.SaveAs(stream);
+        stream.Seek(0, SeekOrigin.Begin);
+        
+        return File(stream.ToArray(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "AbhayYojana_Sample_Template.xlsx");
+    }
+
 
 }

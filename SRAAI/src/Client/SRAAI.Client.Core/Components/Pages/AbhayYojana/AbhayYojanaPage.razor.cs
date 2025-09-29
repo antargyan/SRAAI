@@ -62,6 +62,24 @@ public partial class AbhayYojanaPage : AppPageBase
             Convert.ToBase64String(bytes));
     }
 
+    private async Task DownloadSampleExcel()
+    {
+        try
+        {
+            var bytes = await HttpClient.GetByteArrayAsync("/api/AbhayYojana/DownloadSampleExcel");
+            await JS.InvokeVoidAsync("downloadFile",
+                "AbhayYojana_Sample_Template.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                Convert.ToBase64String(bytes));
+            
+            SnackBarService.Success("Sample Excel template downloaded successfully!");
+        }
+        catch (Exception ex)
+        {
+            SnackBarService.Error($"Failed to download sample template: {ex.Message}");
+        }
+    }
+
     private async void GoToSummary()
     {
         try

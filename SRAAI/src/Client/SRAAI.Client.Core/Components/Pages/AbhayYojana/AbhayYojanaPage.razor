@@ -163,6 +163,23 @@
                 </div>
             </div>
 
+         @*    <!-- Download Sample -->
+            <div class="col-lg-3 col-md-6">
+                <div class="action-card sample-card">
+                    <div class="card-icon">
+                        <i class="fas fa-file-download"></i>
+                    </div>
+                    <h5 class="card-title">Download Sample</h5>
+                    <p class="card-description">Get Excel template with sample data</p>
+                    <button type="button" 
+                            class="btn-action btn-secondary w-100"
+                            @onclick="DownloadSampleExcel">
+                        <i class="fas fa-file-download me-2"></i>
+                        Download Sample
+                    </button>
+                </div>
+            </div> *@
+
             <!-- View Results -->
             <div class="col-lg-3 col-md-6">
                 <div class="action-card analytics-card">
@@ -578,6 +595,10 @@
 
     .analytics-card .card-icon {
         background: var(--info-gradient);
+    }
+
+    .sample-card .card-icon {
+        background: var(--dark-gradient);
     }
 
     .card-icon {
