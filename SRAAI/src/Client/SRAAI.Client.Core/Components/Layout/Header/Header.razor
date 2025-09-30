@@ -23,12 +23,15 @@
                     @pageTitle
                 </BitText>
             </BitStack>
-            @if (string.IsNullOrWhiteSpace(pageSubtitle) is false)
+           @*  @if (string.IsNullOrWhiteSpace(pageSubtitle) is false)
             {
                 <BitText Typography="BitTypography.Body1" Foreground="BitColorKind.Secondary">
                     @pageSubtitle
                 </BitText>
-            }
+            } *@
+            <img src="_content/SRAAI.Client.Core/images/smartailogo.png"
+                 alt="Smartai Logo"
+                 class="hero-logo" />
         </BitStack>
 
         <DiagnosticSpacer />
