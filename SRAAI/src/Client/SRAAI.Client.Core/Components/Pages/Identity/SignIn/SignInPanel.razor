@@ -7,22 +7,28 @@
 } *@
 
 <section class="signin-container">
-    <div class="signin-card">
-        <div class="signin-header">
-            <div class="logo-container">
-                <img src="@(CurrentTheme == AppThemeType.Dark ? "_content/SRAAI.Client.Core/images/Annexurelogo.png" : "_content/SRAAI.Client.Core/images/Annexurelogo.png")"
-                     alt="SRAAI Logo" 
-                     class="signin-logo" />
+    <div class="signin-wrapper">
+        <!-- Left Panel - Logo -->
+        <div class="signin-left-panel">
+            <div class="logo-section">
+                <img src="_content/SRAAI.Client.Core/images/smart-ai.png"
+                     alt="SmartAI Logo" 
+                     class="hero-logo" />
             </div>
-            <BitText Typography="BitTypography.H4" Class="signin-title">
-                SmartAI
-            </BitText>
-          @*   <BitText Typography="BitTypography.Body1" Color="BitColor.SecondaryForeground" Class="signin-subtitle">
-                Welcome back! Please sign in to your account
-            </BitText> *@
         </div>
 
-        <EditForm Model="model" OnSubmit="WrapHandled(DoSignIn)" novalidate class="signin-form">
+        <!-- Right Panel - Form -->
+        <div class="signin-right-panel">
+            <div class="signin-card">
+                <div class="signin-header">
+                    <div class="government-logo">
+                        <img src="@(CurrentTheme == AppThemeType.Dark ? "_content/SRAAI.Client.Core/images/Annexurelogo.png" : "_content/SRAAI.Client.Core/images/Annexurelogo.png")"
+                             alt="Government Logo" 
+                             class="govt-logo" />
+                    </div>
+                </div>
+
+                <EditForm Model="model" OnSubmit="WrapHandled(DoSignIn)" novalidate class="signin-form">
             <AppDataAnnotationsValidator @ref="validatorRef" />
 
             <div class="signin-content">
@@ -137,17 +143,19 @@
             </div>
         </EditForm>
 
-       @*  @if (internalSignInPanelType is SignInPanelType.Full)
-        {
-            <div class="signin-footer">
-                <BitText Align="BitTextAlign.Center" Typography="BitTypography.Body2" Class="signup-message">
-                    @Localizer[nameof(AppStrings.DontHaveAccountMessage)]
-                    <BitLink Href="@($"{PageUrls.SignUp}?return-url={Uri.EscapeDataString(GetReturnUrl())}")" 
-                             Class="signup-link">
-                        @Localizer[nameof(AppStrings.SignUp)]
-                    </BitLink>
-                </BitText>
+                @*  @if (internalSignInPanelType is SignInPanelType.Full)
+                {
+                    <div class="signin-footer">
+                        <BitText Align="BitTextAlign.Center" Typography="BitTypography.Body2" Class="signup-message">
+                            @Localizer[nameof(AppStrings.DontHaveAccountMessage)]
+                            <BitLink Href="@($"{PageUrls.SignUp}?return-url={Uri.EscapeDataString(GetReturnUrl())}")" 
+                                     Class="signup-link">
+                                @Localizer[nameof(AppStrings.SignUp)]
+                            </BitLink>
+                        </BitText>
+                    </div>
+                } *@
             </div>
-        } *@
+        </div>
     </div>
 </section>
