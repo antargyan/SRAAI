@@ -12,7 +12,7 @@
 @using SRAAI.Shared.Dtos.AbhayYojana
 
 <AppPageData Title="SmartAI"
-             PageTitle="SmartAI" />
+             PageTitle="SmartAI"/>
 
 <!-- Enhanced CSS Libraries -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -32,7 +32,9 @@
                             Government Housing Scheme
                         </div> *@
                         <h1 class="hero-title animate__animated animate__fadeInUp animate__delay-1s">
-                            SmartAI <span class="text-gradient"></span>
+                            <img src="_content/SRAAI.Client.Core/images/smartailogo.png"
+                                 alt="SmartaI Logo" class="hero-logo" />
+                                 <span class="text-gradient"></span>
                         </h1>
                         <p class="hero-description animate__animated animate__fadeInUp animate__delay-2s">
                             An AI-enabled Excel sheet comparison system automatically detects, updates, and summarizes differences between sheets in Marathi Unicode text using fuzzy matching and natural-language insights—while ensuring accurate updates with minimal manual effort
@@ -959,4 +961,8 @@
         gap: 6px;
     }
 
+    .hero-logo {
+        max-width: 300px;
+        margin-bottom: 1rem;
+    }
 </style>
