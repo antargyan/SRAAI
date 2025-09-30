@@ -31,14 +31,16 @@
                             <i class="fas fa-shield-alt me-2"></i>
                             Government Housing Scheme
                         </div> *@
-                        <h1 class="hero-title animate__animated animate__fadeInUp animate__delay-1s">
-                            <img src="_content/SRAAI.Client.Core/images/smartaiweb.png"
-                                 alt="SmartaI Logo" class="hero-logo" />
-                                 <span class="text-gradient"></span>
-                        </h1>
-                        <p class="hero-description animate__animated animate__fadeInUp animate__delay-2s">
-                            An AI-enabled Excel sheet comparison system automatically detects, updates, and summarizes differences between sheets in Marathi Unicode text using fuzzy matching and natural-language insights—while ensuring accurate updates with minimal manual effort
-                        </p>
+                        <div class="hero-text-box animate__animated animate__fadeInUp animate__delay-1s">
+                            <h1 class="hero-title">
+                                <img src="_content/SRAAI.Client.Core/images/smartaiweb.png"
+                                     alt="SmartaI Logo" class="hero-logo" />
+                                     <span class="text-gradient"></span>
+                            </h1>
+                            <p class="hero-description">
+                                An AI-enabled Excel sheet comparison system automatically detects, updates, and summarizes differences between sheets in Marathi Unicode text using fuzzy matching and natural-language insights—while ensuring accurate updates with minimal manual effort
+                            </p>
+                        </div>
                         <div class="hero-stats animate__animated animate__fadeInUp animate__delay-3s">
                             <div class="stat-item">
                                 <div class="stat-number">@(applications?.Count() ?? 0)</div>
@@ -55,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                @* <div class="col-lg-4">
                     <div class="hero-illustration animate__animated animate__fadeInRight animate__delay-2s">
                         <div class="floating-card">
                             <i class="fas fa-file-excel"></i>
@@ -67,7 +69,7 @@
                             <i class="fas fa-users"></i>
                         </div>
                     </div>
-                </div>
+                </div> *@
             </div>
         </div>
     </div>
@@ -479,10 +481,18 @@
         backdrop-filter: blur(10px);
     }
 
+    .hero-text-box {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
     .hero-title {
         font-size: 3.5rem;
         font-weight: 700;
-        color: white;
+        color: #1f2937;
         margin-bottom: 20px;
         line-height: 1.2;
     }
@@ -496,8 +506,8 @@
 
     .hero-description {
         font-size: 1.2rem;
-        color: rgba(255,255,255,0.9);
-        margin-bottom: 40px;
+        color: #4b5563;
+        margin-bottom: 0;
         line-height: 1.6;
     }
 
@@ -529,7 +539,7 @@
         height: 300px;
     }
 
-    .floating-card {
+ /*    .floating-card {
         position: absolute;
         width: 80px;
         height: 80px;
@@ -559,7 +569,7 @@
         bottom: 20px;
         right: 50px;
         animation-delay: -4s;
-    }
+    } */
 
     keyframes float {
         0%, 100% { transform: translateY(0px); }
